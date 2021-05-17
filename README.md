@@ -32,12 +32,13 @@ docker build -t vergoh/vnstat .
 
 ```
 docker run -d \
+    --restart=unless-stopped \
     --network=host \
     -e HTTP_PORT=8685 \
     -v "/etc/localtime":"/etc/localtime":ro \
     -v "/etc/timezone":"/etc/timezone":ro \
     --name vnstat \
-    vnstat
+    vergoh/vnstat
 ```
 
 - `--network=host` is necessary for accessing the network interfaces of the Docker host instead of being limited to monitoring the container specific interface
@@ -45,9 +46,16 @@ docker run -d \
 - Image output is available at `http://localhost:8685/` (using default port)
 - Json output is available at `http://localhost:8685/json.cgi` (using default port)
 - Add `-v some_local_directory:/var/lib/vnstat` to map the database directory to the local filesystem if easier access/backups is needed
+- It takes around 5 minutes for the initial data to become available for interfaces having traffic
 
 Command line interface can be accessed with:
 
 ```
-docker exec -t vnstat vnstat --help
+docker exec vnstat vnstat --help
+```
+
+## Stopping the container
+
+```
+docker stop vnstat
 ```
