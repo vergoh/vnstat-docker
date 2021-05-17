@@ -1,6 +1,9 @@
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/vergoh/vnstat-docker/CI/master)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/vergoh/vnstat/latest)
+
 # vnStat in a container
 
-vnStat is a console-based network traffic monitor that uses the network
+vnStat is a network traffic monitor that uses the network
 interface statistics provided by the kernel as information source. This
 means that vnStat won't actually be sniffing any traffic and also ensures
 light use of system resources regardless of network traffic rate.
@@ -13,7 +16,8 @@ provided.
 
 See the [official webpage](https://humdi.net/vnstat/) or the
 [GitHub repository](https://github.com/vergoh/vnstat) for additional details
-and output examples.
+and output examples. An example of the included image output is also
+[available](https://humdi.net/vnstat/cgidemo/).
 
 ## Container content
 
