@@ -24,13 +24,19 @@ jobs:
           username: ${{ secrets.DHUB_USERNAME }}
           password: ${{ secrets.DHUB_TOKEN }}
 
+      - name: get release information
+        run: |
+          curl --silent --fail --fail-early $GITHUB_API_URL/repos/vergoh/vnstat/releases/latest | \
+            jq -r .tag_name | \
+            sed -e 's:[^0-9.]::g' -e 's:^:latest_release=:g' >> $GITHUB_ENV
+
       - name: build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: vergoh/vnstat:latest
+          tags: vergoh/vnstat:latest,vergoh/vnstat:${{ env.latest_release }}
 
       - name: image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
