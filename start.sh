@@ -2,8 +2,11 @@
 
 # configure web content
 sed -i -e '/{ interface =>/d' \
-       -e "s/^my \$cachetime =.*/my \$cachetime = \'1\';/g" \
-       -e "s/^my \$scriptname =.*;/my \$scriptname = \'index.cgi\';/g" /var/www/http/index.cgi
+       -e "s/^my \$scriptname =.*;/my \$scriptname = \'index.cgi\';/g" \
+       -e "s/^my \$servername =.*;/my \$servername = \'${SERVER_NAME}\';/g" \
+       -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
+       -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
+       /var/www/http/index.cgi
 sed -i -e 's:my @interfaces = (.*:my @interfaces = (\n);:g' /var/www/http/json.cgi
 
 IFLIST_CMD="vnstat --iflist 1"

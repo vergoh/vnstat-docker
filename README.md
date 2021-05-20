@@ -21,7 +21,7 @@ and output examples. An example of the included image output is also
 
 ## Container content
 
-- Latest released vnStat version
+- [Latest released](https://humdi.net/vnstat/CHANGES) vnStat version
 - vnStat daemon (`vnstatd`) is running as the primary process
 - [thttpd](https://acme.com/software/thttpd/) provides vnStat image output (`vnstati`) via http (port 8685 by default)
 - vnStat command line (`vnstat`)
@@ -46,7 +46,8 @@ docker run -d \
 ```
 
 - `--network=host` is necessary for accessing the network interfaces of the Docker host instead of being limited to monitoring the container specific interface
-- The http server port can be modified with the `HTTP_PORT` environment as shown in the example above
+- The http server port can be modified using the `HTTP_PORT` environment variable as shown in the example above
+  - See the full list of available environment variables below
 - Image output is available at `http://localhost:8685/` (using default port)
 - Json output is available at `http://localhost:8685/json.cgi` (using default port)
 - Add `-v some_local_directory:/var/lib/vnstat` to map the database directory to the local filesystem if easier access/backups is needed
@@ -63,3 +64,12 @@ docker exec vnstat vnstat --help
 ```
 docker stop vnstat
 ```
+
+## Environment variables
+
+Name | Description | Default value
+--- | --- | ---
+HTTP_PORT | Port of the web server | 8586
+SERVER_NAME | Name of the server in the web page title | Some Server
+LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
+CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
