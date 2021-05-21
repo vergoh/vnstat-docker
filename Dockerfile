@@ -12,10 +12,11 @@ RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev t
   cd vnstat-*/ && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make && make install && \
-  cp -v examples/vnstat.cgi /var/www/http/index.cgi && \
-  cp -v examples/vnstat-json.cgi /var/www/http/json.cgi && \
   cd .. && rm -fr vnstat* && \
   apk del gcc pkgconf gd-dev make musl-dev sqlite-dev
+
+COPY vnstat.cgi /var/www/http/index.cgi
+COPY vnstat-json.cgi /var/www/http/json.cgi
 
 VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
