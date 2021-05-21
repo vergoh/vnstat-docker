@@ -59,10 +59,29 @@ Command line interface can be accessed with:
 docker exec vnstat vnstat --help
 ```
 
-## Stopping the container
+## docker-compose.yml
 
 ```
-docker stop vnstat
+version: "3.7"
+services:
+
+  vnstat:
+    image: vergoh/vnstat:latest
+    container_name: vnstat
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - vnstatdb:/var/lib/vnstat
+    environment:
+      - HTTP_PORT=8685
+      - SERVER_NAME=${HOSTNAME:-Some Server}
+      - LARGE_FONTS=0
+      - CACHE_TIME=1
+
+volumes:
+  vnstatdb:
 ```
 
 ## Environment variables

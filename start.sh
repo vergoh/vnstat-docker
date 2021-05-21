@@ -20,6 +20,7 @@ done
 
 # start httpd
 thttpd -C /etc/thttpd.conf -p ${HTTP_PORT}
+echo "thttpd started in port ${HTTP_PORT}"
 
 # start vnstat daemon
 vnstatd -n
