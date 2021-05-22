@@ -12,7 +12,6 @@ services:
       - vnstatdb:/var/lib/vnstat
     environment:
       - HTTP_PORT=8685
-      - SERVER_NAME=${HOSTNAME:-Some Server}
       - LARGE_FONTS=0
       - CACHE_TIME=1
 

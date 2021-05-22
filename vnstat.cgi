@@ -9,8 +9,9 @@
 # released under the GNU General Public License
 
 
-my $servername = 'Some Server';
-my $scriptname = 'vnstat.cgi';
+# server name in page title
+# fill to set, otherwise "hostname" command output is used
+my $servername = '';
 
 # temporary directory where to store the images
 my $tmp_dir = '/tmp/vnstatcgi';
@@ -25,9 +26,8 @@ my $vnstati_cmd = '/usr/bin/vnstati';
 my $cachetime = '0';
 
 # shown interfaces
-# for static list, uncomment first line below, update the list and comment out second line
+# for static list, uncomment and update the list
 #my @interfaces = ('eth0', 'eth1');
-my @interfaces = `$vnstat_cmd --dbiflist 1`;
 
 # center images on page instead of left alignment, set 0 to disable
 my $aligncenter = '1';
@@ -42,7 +42,7 @@ my $bgcolor = "white";
 ################
 
 
-my $VERSION = "1.7";
+my $VERSION = "1.8";
 my $cssbody = "body { background-color: $bgcolor; }";
 
 sub graph($$$)
@@ -87,11 +87,11 @@ $cssbody
 HEADER
 
 	for my $i (0..$#interfaces) {
-		print "<p><a href=\"$scriptname?${i}-f\"><img src=\"$scriptname?${i}-hs\" border=\"0\" alt=\"$interfaces[${i}] summary\"></a></p>\n";
+		print "<p><a href=\"$ENV{SCRIPT_NAME}?${i}-f\"><img src=\"$ENV{SCRIPT_NAME}?${i}-hs\" border=\"0\" alt=\"$interfaces[${i}] summary\"></a></p>\n";
 	}
 
 	print <<FOOTER;
-<small>Images generated using <a href="http://humdi.net/vnstat/">vnStat</a> image output.</small>
+<small>Images generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
 <br><br>
 </body>
 </html>
@@ -125,18 +125,18 @@ $cssbody
 HEADER
 
 	print "<table border=\"0\"><tr><td valign=\"top\">\n";
-	print "<img src=\"$scriptname?${interface}-s\" border=\"0\" alt=\"$interfaces[${interface}] summary\"><br>\n";
-	print "<img src=\"$scriptname?${interface}-d\" border=\"0\" alt=\"$interfaces[${interface}] daily\" vspace=\"4\"><br>\n";
-	print "<img src=\"$scriptname?${interface}-t\" border=\"0\" alt=\"$interfaces[${interface}] top 10\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-s\" border=\"0\" alt=\"$interfaces[${interface}] summary\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-d\" border=\"0\" alt=\"$interfaces[${interface}] daily\" vspace=\"4\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-t\" border=\"0\" alt=\"$interfaces[${interface}] top 10\"><br>\n";
 	print "</td><td valign=\"top\">\n";
-	print "<img src=\"$scriptname?${interface}-hg\" border=\"0\" alt=\"$interfaces[${interface}] hourly\"><br>\n";
-	print "<img src=\"$scriptname?${interface}-5g\" border=\"0\" alt=\"$interfaces[${interface}] 5 minute\" vspace=\"4\"><br>\n";
-	print "<img src=\"$scriptname?${interface}-m\" border=\"0\" alt=\"$interfaces[${interface}] monthly\"><br>\n";
-	print "<img src=\"$scriptname?${interface}-y\" border=\"0\" alt=\"$interfaces[${interface}] yearly\" vspace=\"4\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-hg\" border=\"0\" alt=\"$interfaces[${interface}] hourly\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-5g\" border=\"0\" alt=\"$interfaces[${interface}] 5 minute\" vspace=\"4\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-m\" border=\"0\" alt=\"$interfaces[${interface}] monthly\"><br>\n";
+	print "<img src=\"$ENV{SCRIPT_NAME}?${interface}-y\" border=\"0\" alt=\"$interfaces[${interface}] yearly\" vspace=\"4\"><br>\n";
 	print "</td></tr>\n</table>\n";
 
 	print <<FOOTER;
-<small><br>&nbsp;Images generated using <a href="http://humdi.net/vnstat/">vnStat</a> image output.</small>
+<small><br>&nbsp;Images generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
 <br><br>
 </body>
 </html>
@@ -168,52 +168,59 @@ sub show_error($)
 
 sub main()
 {
+	if (not defined $interfaces) {
+		our @interfaces = `$vnstat_cmd --dbiflist 1`;
+	}
 	chomp @interfaces;
 
-	if($aligncenter != '0') {
+	if (length($servername) == 0) {
+		$servername = `hostname`;
+	}
+
+	if ($aligncenter != '0') {
 		$cssbody = "html { display: table; width: 100%; }\nbody { background-color: $bgcolor; display: table-cell; text-align: center; vertical-align: middle; }\ntable {  margin-left: auto; margin-right: auto; margin-top: 10px; }";
 	}
 
 	mkdir $tmp_dir, 0755 unless -d $tmp_dir;
 
 	my $img = $ENV{QUERY_STRING};
-	if(defined $img and $img =~ /\S/) {
-		if($img =~ /^(\d+)-s$/) {
+	if (defined $img and $img =~ /\S/) {
+		if ($img =~ /^(\d+)-s$/) {
 			my $file = "$tmp_dir/vnstat_$1.png";
 			graph($interfaces[$1], $file, "-s");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-hs$/) {
+		elsif ($img =~ /^(\d+)-hs$/) {
 			my $file = "$tmp_dir/vnstat_$1_hs.png";
 			graph($interfaces[$1], $file, "-hs");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-d$/) {
+		elsif ($img =~ /^(\d+)-d$/) {
 			my $file = "$tmp_dir/vnstat_$1_d.png";
 			graph($interfaces[$1], $file, "-d 30");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-m$/) {
+		elsif ($img =~ /^(\d+)-m$/) {
 			my $file = "$tmp_dir/vnstat_$1_m.png";
 			graph($interfaces[$1], $file, "-m 12");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-t$/) {
+		elsif ($img =~ /^(\d+)-t$/) {
 			my $file = "$tmp_dir/vnstat_$1_t.png";
 			graph($interfaces[$1], $file, "-t 10");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-h$/) {
+		elsif ($img =~ /^(\d+)-h$/) {
 			my $file = "$tmp_dir/vnstat_$1_h.png";
 			graph($interfaces[$1], $file, "-h");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-hg$/) {
+		elsif ($img =~ /^(\d+)-hg$/) {
 			my $file = "$tmp_dir/vnstat_$1_hg.png";
 			graph($interfaces[$1], $file, "-hg");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-5g$/) {
+		elsif ($img =~ /^(\d+)-5g$/) {
 			my $file = "$tmp_dir/vnstat_$1_5g.png";
 			if ($largefonts == '1') {
 				graph($interfaces[$1], $file, "-5g 576 300");
@@ -222,12 +229,12 @@ sub main()
 			}
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-y$/) {
+		elsif ($img =~ /^(\d+)-y$/) {
 			my $file = "$tmp_dir/vnstat_$1_y.png";
 			graph($interfaces[$1], $file, "-y 5");
 			send_image($file);
 		}
-		elsif($img =~ /^(\d+)-f$/) {
+		elsif ($img =~ /^(\d+)-f$/) {
 			print_fullhtml($1);
 		}
 		else {

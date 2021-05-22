@@ -46,6 +46,8 @@ docker run -d \
 ```
 
 - `--network=host` is necessary for accessing the network interfaces of the Docker host instead of being limited to monitoring the container specific interface
+- `--privileged` may need to be used if the date within the container starts from 1970
+  - The proper solution would be to update libseccomp2 to a more recent version than currently installed
 - The http server port can be modified using the `HTTP_PORT` environment variable as shown in the example above
   - See the full list of available environment variables below
 - Image output is available at `http://localhost:8685/` (using default port)
@@ -76,7 +78,6 @@ services:
       - vnstatdb:/var/lib/vnstat
     environment:
       - HTTP_PORT=8685
-      - SERVER_NAME=${HOSTNAME:-Some Server}
       - LARGE_FONTS=0
       - CACHE_TIME=1
 
@@ -89,6 +90,6 @@ volumes:
 Name | Description | Default value
 --- | --- | ---
 HTTP_PORT | Port of the web server | 8586
-SERVER_NAME | Name of the server in the web page title | Some Server
+SERVER_NAME | Name of the server in the web page title | Output of `hostname` command
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1

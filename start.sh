@@ -1,9 +1,11 @@
 #!/bin/sh
 
 # configure web content
-sed -i -e "s/^my \$scriptname =.*;/my \$scriptname = \'index.cgi\';/g" \
-       -e "s/^my \$servername =.*;/my \$servername = \'${SERVER_NAME}\';/g" \
-       -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
+test ! -z "$SERVER_NAME" && \
+  sed -i -e "s/^my \$servername =.*;/my \$servername = \'${SERVER_NAME}\';/g" \
+    /var/www/http/index.cgi
+
+sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
        /var/www/http/index.cgi
 
