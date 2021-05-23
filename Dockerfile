@@ -3,6 +3,7 @@ FROM alpine:latest
 ENV HTTP_PORT=8586
 ENV LARGE_FONTS=0
 ENV CACHE_TIME=1
+ENV RATE_UNIT=1
 
 RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev thttpd && \
   sed -i -e '/chroot/d' -e '/vhost/d' /etc/thttpd.conf && \
