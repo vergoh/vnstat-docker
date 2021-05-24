@@ -28,19 +28,19 @@ and output examples. An example of the included image output is also
 
 ## Building the container
 
-```
+```sh
 docker build -t vergoh/vnstat .
 ```
 
 ## Running the container
 
-```
+```sh
 docker run -d \
     --restart=unless-stopped \
     --network=host \
     -e HTTP_PORT=8685 \
-    -v "/etc/localtime":"/etc/localtime":ro \
-    -v "/etc/timezone":"/etc/timezone":ro \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /etc/timezone:/etc/timezone:ro \
     --name vnstat \
     vergoh/vnstat
 ```
@@ -53,17 +53,16 @@ docker run -d \
 - Image output is available at `http://localhost:8685/` (using default port)
 - Json output is available at `http://localhost:8685/json.cgi` (using default port)
 - Add `-v some_local_directory:/var/lib/vnstat` to map the database directory to the local filesystem if easier access/backups is needed
-- It takes around 5 minutes for the initial data to become available for interfaces having traffic
 
 Command line interface can be accessed with:
 
-```
+```sh
 docker exec vnstat vnstat --help
 ```
 
 ## docker-compose.yml
 
-```
+```text
 version: "3.7"
 services:
 
@@ -95,3 +94,60 @@ SERVER_NAME | Name of the server in the web page title | Output of `hostname` co
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
+
+## Usage tips
+
+### Add descriptive interface name
+
+```sh
+docker exec vnstat vnstat -i eno3 --setalias "Basement switch"
+```
+
+### Stop monitoring unnecessary interface
+
+```sh
+docker exec vnstat vnstat -i br-20f8582bfc70 --remove --force
+```
+
+### Add interface for monitoring
+
+1. Check that the interface is visible on the list of available interfaces:
+
+    ```sh
+    docker exec vnstat vnstat --iflist
+    ```
+
+2. Add the interface
+
+    ```sh
+    docker exec vnstat vnstat -i br-20f8582bfc70 --add
+    ```
+
+3. Notify the daemon
+
+    ```sh
+    docker exec vnstat killall -HUP vnstatd
+    ```
+
+## Troubleshooting
+
+- All images show `no data available` after the container has been started.
+  - The database write interval is 5 minutes so it will take 5 minutes for the initial data to become available.
+
+- Is the container running?
+
+    ```sh
+    docker ps
+    ```
+
+- What does the container log?
+
+    ```sh
+    docker logs vnstat
+    ```
+
+- Using a Synology NAS and timezone isn't correct?
+  - Use `/etc/TZ:/etc/localtime:ro` instead of `/etc/localtime:/etc/localtime:ro`
+
+- Container log shows `Latest database update is in the future (db: 2037-04-03 18:16:49 > now: 1970-01-01 02:00:00)` or something similar with `now` being in 1970.
+  - Use `--privileged` or upgrade libseccomp2 to a much more recent version.
