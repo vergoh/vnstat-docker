@@ -13,7 +13,7 @@ sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
 sed -i -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" /etc/vnstat.conf
 
 # start httpd
-thttpd -C /etc/thttpd.conf -p ${HTTP_PORT}
+thttpd -C /etc/thttpd.conf -p ${HTTP_PORT} -l ${HTTP_LOG}
 echo "thttpd started in port ${HTTP_PORT}"
 
 # start vnStat daemon
