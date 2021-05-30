@@ -1,9 +1,10 @@
-name: CI
+name: release
 
 on:
   push:
     branches:
       - 'master'
+  workflow_dispatch:
   schedule:
     # one scheduled build on the first day of every month at 3:42
     - cron: '42 3 1 * *'
@@ -37,6 +38,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: vergoh/vnstat:latest,vergoh/vnstat:${{ env.latest_release }}
+          labels: |
+            version=${{ env.latest_release }}
 
       - name: image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

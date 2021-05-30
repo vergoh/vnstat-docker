@@ -1,4 +1,4 @@
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/vergoh/vnstat-docker/CI/master)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/vergoh/vnstat-docker/release/master)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/vergoh/vnstat/latest)
 
 # vnStat in a container
