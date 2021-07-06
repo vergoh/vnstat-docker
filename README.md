@@ -21,10 +21,18 @@ and output examples. An example of the included image output is also
 
 ## Container content
 
-- [Latest released](https://humdi.net/vnstat/CHANGES) vnStat version
 - vnStat daemon (`vnstatd`) is running as the primary process
 - [thttpd](https://acme.com/software/thttpd/) provides vnStat image output (`vnstati`) via http (port 8685 by default)
 - vnStat command line (`vnstat`)
+
+## Supported tags in Docker Hub
+
+- [`vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
+- [`vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
+
+Version specific tags are available starting from `2.7` with the latest release being the same as `latest` tag. `latest` and `dev` are automatically built at least monthly to include possible install time updates.
+
+Currently `latest` also includes updated versions of `vnstat.cgi` and `vnstat-json.cgi` for improved configurability.
 
 ## Building the container
 
