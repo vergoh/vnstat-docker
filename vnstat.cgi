@@ -44,6 +44,18 @@ my $bgcolor = "white";
 
 my $VERSION = "1.10";
 my $cssbody = "body { background-color: $bgcolor; }";
+my $csscommonstyle = <<CSS;
+a { text-decoration: underline; }
+a:link { color: #b0b0b0; }
+a:visited { color: #b0b0b0; }
+a:hover { color: #000000; }
+small { font-size: 8px; color: #cbcbcb; }
+img { border: 0; vertical-align: top; }
+table { border: 0; }
+table td { vertical-align: top; }
+small { display: block; }
+CSS
+
 my ($scriptname) = $ENV{SCRIPT_NAME} =~ /([^\/]*)$/;
 
 sub graph($$$)
@@ -67,19 +79,15 @@ sub print_interface_list_html()
 	print "Content-Type: text/html\n\n";
 
 	print <<HEADER;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="Generator" content="vnstat.cgi $VERSION">
 <title>Traffic Statistics for $servername</title>
-<style type="text/css">
+<style>
 <!--
-a { text-decoration: underline; }
-a:link { color: #b0b0b0; }
-a:visited { color: #b0b0b0; }
-a:hover { color: #000000; }
-small { font-size: 8px; color: #cbcbcb; }
+$csscommonstyle
 $cssbody
 -->
 </style>
@@ -87,11 +95,11 @@ $cssbody
 HEADER
 
 	for my $i (0..$#interfaces) {
-		print "<p><a href=\"${scriptname}?${i}-f\"><img src=\"${scriptname}?${i}-hs\" border=\"0\" alt=\"$interfaces[${i}] summary\"></a></p>\n";
+		print "<p><a href=\"${scriptname}?${i}-f\"><img src=\"${scriptname}?${i}-hs\" alt=\"$interfaces[${i}] summary\"></a></p>\n";
 	}
 
 	print <<FOOTER;
-<small>Images generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
+<small style=\"padding: 4px 4px\">Images generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
 <br><br>
 </body>
 </html>
@@ -105,38 +113,34 @@ sub print_single_interface_html($)
 	print "Content-Type: text/html\n\n";
 
 	print <<HEADER;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="Generator" content="vnstat.cgi $VERSION">
 <title>Traffic Statistics for $servername - $interfaces[${interface}]</title>
-<style type="text/css">
+<style>
 <!--
-a { text-decoration: underline; }
-a:link { color: #b0b0b0; }
-a:visited { color: #b0b0b0; }
-a:hover { color: #000000; }
-small { font-size: 8px; color: #cbcbcb; }
+$csscommonstyle
 $cssbody
 -->
 </style>
 </head>
 HEADER
 
-	print "<table border=\"0\"><tr><td valign=\"top\">\n";
-	print "<img src=\"${scriptname}?${interface}-s\" border=\"0\" alt=\"$interfaces[${interface}] summary\"><br>\n";
-	print "<a href=\"${scriptname}?s-${interface}-d-l\"><img src=\"${scriptname}?${interface}-d\" border=\"0\" alt=\"$interfaces[${interface}] daily\" vspace=\"4\"></a><br>\n";
-	print "<a href=\"${scriptname}?s-${interface}-t-l\"><img src=\"${scriptname}?${interface}-t\" border=\"0\" alt=\"$interfaces[${interface}] top 10\"></a><br>\n";
-	print "</td><td valign=\"top\">\n";
-	print "<a href=\"${scriptname}?s-${interface}-h\"><img src=\"${scriptname}?${interface}-hg\" border=\"0\" alt=\"$interfaces[${interface}] hourly\"></a><br>\n";
-	print "<a href=\"${scriptname}?s-${interface}-5\"><img src=\"${scriptname}?${interface}-5g\" border=\"0\" alt=\"$interfaces[${interface}] 5 minute\" vspace=\"4\"></a><br>\n";
-	print "<a href=\"${scriptname}?s-${interface}-m-l\"><img src=\"${scriptname}?${interface}-m\" border=\"0\" alt=\"$interfaces[${interface}] monthly\"></a><br>\n";
-	print "<a href=\"${scriptname}?s-${interface}-y-l\"><img src=\"${scriptname}?${interface}-y\" border=\"0\" alt=\"$interfaces[${interface}] yearly\" vspace=\"4\"></a><br>\n";
+	print "<table><tr><td>\n";
+	print "<img src=\"${scriptname}?${interface}-s\" alt=\"$interfaces[${interface}] summary\"><br>\n";
+	print "<a href=\"${scriptname}?s-${interface}-d-l\"><img src=\"${scriptname}?${interface}-d\" alt=\"$interfaces[${interface}] daily\" style=\"margin: 4px 0px\"></a><br>\n";
+	print "<a href=\"${scriptname}?s-${interface}-t-l\"><img src=\"${scriptname}?${interface}-t\" alt=\"$interfaces[${interface}] top 10\"></a><br>\n";
+	print "</td><td>\n";
+	print "<a href=\"${scriptname}?s-${interface}-h\"><img src=\"${scriptname}?${interface}-hg\" alt=\"$interfaces[${interface}] hourly\"></a><br>\n";
+	print "<a href=\"${scriptname}?s-${interface}-5\"><img src=\"${scriptname}?${interface}-5g\" alt=\"$interfaces[${interface}] 5 minute\" style=\"margin: 4px 0px\"></a><br>\n";
+	print "<a href=\"${scriptname}?s-${interface}-m-l\"><img src=\"${scriptname}?${interface}-m\" alt=\"$interfaces[${interface}] monthly\"></a><br>\n";
+	print "<a href=\"${scriptname}?s-${interface}-y-l\"><img src=\"${scriptname}?${interface}-y\" alt=\"$interfaces[${interface}] yearly\" style=\"margin: 4px 0px\"></a><br>\n";
 	print "</td></tr>\n</table>\n";
 
 	print <<FOOTER;
-<small><br>&nbsp;Images generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
+<small style=\"padding: 12px 4px\">Images generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
 <br><br>
 </body>
 </html>
@@ -174,31 +178,27 @@ sub print_single_image_html($)
 	print "Content-Type: text/html\n\n";
 
 	print <<HEADER;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="Generator" content="vnstat.cgi $VERSION">
 <title>$content Traffic Statistics for $servername - $interfaces[${interface}]</title>
-<style type="text/css">
+<style>
 <!--
-a { text-decoration: underline; }
-a:link { color: #b0b0b0; }
-a:visited { color: #b0b0b0; }
-a:hover { color: #000000; }
-small { font-size: 8px; color: #cbcbcb; }
+$csscommonstyle
 $cssbody
 -->
 </style>
 </head>
 HEADER
 
-	print "<table border=\"0\"><tr><td valign=\"top\">\n";
-	print "<img src=\"${scriptname}?${image}\" alt=\"$interfaces[${interface}] ", lc($content), "\" border=\"0\">\n";
+	print "<table><tr><td>\n";
+	print "<img src=\"${scriptname}?${image}\" alt=\"$interfaces[${interface}] ", lc($content), "\">\n";
 	print "</td></tr>\n</table>\n";
 
 	print <<FOOTER;
-<small><br>&nbsp;Image generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
+<small style=\"padding: 12px 4px\">Image generated using <a href="https://humdi.net/vnstat/">vnStat</a> image output.</small>
 <br><br>
 </body>
 </html>
@@ -241,7 +241,7 @@ sub main()
 	}
 
 	if ($aligncenter != '0') {
-		$cssbody = "html { display: table; width: 100%; }\nbody { background-color: $bgcolor; display: table-cell; text-align: center; vertical-align: middle; }\ntable {  margin-left: auto; margin-right: auto; margin-top: 10px; }";
+		$cssbody = "html { display: table; width: 100%; }\nbody { background-color: $bgcolor; display: table-cell; text-align: center; vertical-align: middle; }\ntable { margin-left: auto; margin-right: auto; margin-top: 10px; }";
 	}
 
 	mkdir $tmp_dir, 0755 unless -d $tmp_dir;
