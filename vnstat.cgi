@@ -246,64 +246,64 @@ sub main()
 
 	mkdir $tmp_dir, 0755 unless -d $tmp_dir;
 
-	my $img = $ENV{QUERY_STRING};
-	if (defined $img and $img =~ /\S/) {
-		if ($img =~ /^(\d+)-s$/) {
+	my $query = $ENV{QUERY_STRING};
+	if (defined $query and $query =~ /\S/) {
+		if ($query =~ /^(\d+)-s$/) {
 			my $file = "$tmp_dir/vnstat_$1.png";
 			graph($interfaces[$1], $file, "-s");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-hs$/) {
+		elsif ($query =~ /^(\d+)-hs$/) {
 			my $file = "$tmp_dir/vnstat_$1_hs.png";
 			graph($interfaces[$1], $file, "-hs");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-d$/) {
+		elsif ($query =~ /^(\d+)-d$/) {
 			my $file = "$tmp_dir/vnstat_$1_d.png";
 			graph($interfaces[$1], $file, "-d 30");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-d-l$/) {
+		elsif ($query =~ /^(\d+)-d-l$/) {
 			my $file = "$tmp_dir/vnstat_$1_d_l.png";
 			graph($interfaces[$1], $file, "-d 60");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-m$/) {
+		elsif ($query =~ /^(\d+)-m$/) {
 			my $file = "$tmp_dir/vnstat_$1_m.png";
 			graph($interfaces[$1], $file, "-m 12");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-m-l$/) {
+		elsif ($query =~ /^(\d+)-m-l$/) {
 			my $file = "$tmp_dir/vnstat_$1_m_l.png";
 			graph($interfaces[$1], $file, "-m 24");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-t$/) {
+		elsif ($query =~ /^(\d+)-t$/) {
 			my $file = "$tmp_dir/vnstat_$1_t.png";
 			graph($interfaces[$1], $file, "-t 10");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-t-l$/) {
+		elsif ($query =~ /^(\d+)-t-l$/) {
 			my $file = "$tmp_dir/vnstat_$1_t_l.png";
 			graph($interfaces[$1], $file, "-t 20");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-h$/) {
+		elsif ($query =~ /^(\d+)-h$/) {
 			my $file = "$tmp_dir/vnstat_$1_h.png";
 			graph($interfaces[$1], $file, "-h 48");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-hg$/) {
+		elsif ($query =~ /^(\d+)-hg$/) {
 			my $file = "$tmp_dir/vnstat_$1_hg.png";
 			graph($interfaces[$1], $file, "-hg");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-5$/) {
+		elsif ($query =~ /^(\d+)-5$/) {
 			my $file = "$tmp_dir/vnstat_$1_5.png";
 			graph($interfaces[$1], $file, "-5 60");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-5g$/) {
+		elsif ($query =~ /^(\d+)-5g$/) {
 			my $file = "$tmp_dir/vnstat_$1_5g.png";
 			if ($largefonts == '1') {
 				graph($interfaces[$1], $file, "-5g 576 300");
@@ -312,20 +312,20 @@ sub main()
 			}
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-y$/) {
+		elsif ($query =~ /^(\d+)-y$/) {
 			my $file = "$tmp_dir/vnstat_$1_y.png";
 			graph($interfaces[$1], $file, "-y 5");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-y-l$/) {
+		elsif ($query =~ /^(\d+)-y-l$/) {
 			my $file = "$tmp_dir/vnstat_$1_y_l.png";
 			graph($interfaces[$1], $file, "-y 0");
 			send_image($file);
 		}
-		elsif ($img =~ /^(\d+)-f$/) {
+		elsif ($query =~ /^(\d+)-f$/) {
 			print_single_interface_html($1);
 		}
-		elsif ($img =~ /^s-(.+)/) {
+		elsif ($query =~ /^s-(.+)/) {
 			print_single_image_html($1);
 		}
 		else {
