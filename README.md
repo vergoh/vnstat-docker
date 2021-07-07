@@ -22,7 +22,7 @@ and output examples. An example of the included image output is also
 ## Container content
 
 - vnStat daemon (`vnstatd`) is running as the primary process
-- [thttpd](https://acme.com/software/thttpd/) provides vnStat image output (`vnstati`) via http (port 8685 by default)
+- [lighttpd](https://www.lighttpd.net/) provides vnStat image output (`vnstati`) via http (port 8685 by default)
 - vnStat command line (`vnstat`)
 
 ## Supported tags in Docker Hub

@@ -3,19 +3,44 @@
 # configure web content
 test ! -z "$SERVER_NAME" && \
   sed -i -e "s/^my \$servername =.*;/my \$servername = \'${SERVER_NAME}\';/g" \
-    /var/www/http/index.cgi
+    /var/www/localhost/htdocs/index.cgi
 
 sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
-       /var/www/http/index.cgi
+       /var/www/localhost/htdocs/index.cgi
 
 # configure vnStat
 sed -i -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" /etc/vnstat.conf
 
-# start httpd if port > 0
-test ${HTTP_PORT} -gt 0 && \
-  thttpd -C /etc/thttpd.conf -p ${HTTP_PORT} -l ${HTTP_LOG} && \
-  echo "thttpd started in port ${HTTP_PORT}"
+# configure and start httpd if port > 0
+if [ "${HTTP_PORT}" -gt 0 ]; then
+
+  echo 'server.compat-module-load = "disable"
+server.modules = ("mod_indexfile", "mod_accesslog")
+include "mod_cgi.conf"
+server.username      = "lighttpd"
+server.groupname     = "lighttpd"
+server.document-root = "/var/www/localhost/htdocs"
+server.pid-file      = "/run/lighttpd.pid"
+server.indexfiles = ("index.cgi")' >/etc/lighttpd/lighttpd.conf
+  echo "server.port = ${HTTP_PORT}" >>/etc/lighttpd/lighttpd.conf
+
+  if [ "${HTTP_LOG}" = "/dev/stdout" ]; then
+    exec 3>&1
+    chmod a+rwx /dev/fd/3
+    echo 'accesslog.filename = "/dev/fd/3"' >>/etc/lighttpd/lighttpd.conf
+    echo 'server.errorlog = "/dev/fd/3"' >>/etc/lighttpd/lighttpd.conf
+  else
+    echo "accesslog.filename = \"${HTTP_LOG}\"" >>/etc/lighttpd/lighttpd.conf
+    echo "server.errorlog = \"${HTTP_LOG}\"" >>/etc/lighttpd/lighttpd.conf
+  fi
+
+  echo 'server.modules += ("mod_cgi")
+cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/mod_cgi.conf
+
+  lighttpd-angel -f /etc/lighttpd/lighttpd.conf && \
+    echo "lighttpd started in port ${HTTP_PORT}"
+fi
 
 # start vnStat daemon
 vnstatd -n

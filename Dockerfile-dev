@@ -1,19 +1,22 @@
 FROM alpine:latest
 
+LABEL author="Teemu Toivola"
+LABEL repository.git="https://github.com/vergoh/vnstat-docker"
+LABEL repository.docker="https://hub.docker.com/r/vergoh/vnstat"
+
 ENV HTTP_PORT=8586
 ENV HTTP_LOG=/dev/stdout
 ENV LARGE_FONTS=0
 ENV CACHE_TIME=1
 ENV RATE_UNIT=1
 
-RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev thttpd git && \
-  sed -i -e '/^chroot/d' -e '/^vhost/d' -e '/^logfile/d' /etc/thttpd.conf && \
+RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev lighttpd git && \
   git clone --depth 1 https://github.com/vergoh/vnstat && \
   cd vnstat/ && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make && make install && \
-  cp -v examples/vnstat.cgi /var/www/http/index.cgi && \
-  cp -v examples/vnstat-json.cgi /var/www/http/json.cgi && \
+  cp -v examples/vnstat.cgi /var/www/localhost/htdocs/index.cgi && \
+  cp -v examples/vnstat-json.cgi /var/www/localhost/htdocs/json.cgi && \
   cd .. && rm -fr vnstat* && \
   apk del gcc pkgconf gd-dev make musl-dev sqlite-dev git
 
