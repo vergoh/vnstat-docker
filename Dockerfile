@@ -22,6 +22,7 @@ RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev l
 
 COPY vnstat.cgi /var/www/localhost/htdocs/index.cgi
 COPY vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
+COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
 
 VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}

@@ -17,13 +17,13 @@ sed -i -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" /etc/vnstat.conf
 if [ "${HTTP_PORT}" -gt 0 ]; then
 
   echo 'server.compat-module-load = "disable"
-server.modules = ("mod_indexfile", "mod_accesslog")
-include "mod_cgi.conf"
+server.modules = ("mod_indexfile", "mod_cgi", "mod_staticfile", "mod_accesslog")
 server.username      = "lighttpd"
 server.groupname     = "lighttpd"
 server.document-root = "/var/www/localhost/htdocs"
 server.pid-file      = "/run/lighttpd.pid"
-server.indexfiles = ("index.cgi")' >/etc/lighttpd/lighttpd.conf
+server.indexfiles = ("index.cgi")
+cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
   echo "server.port = ${HTTP_PORT}" >>/etc/lighttpd/lighttpd.conf
 
   if [ "${HTTP_LOG}" = "/dev/stdout" ]; then
@@ -35,9 +35,6 @@ server.indexfiles = ("index.cgi")' >/etc/lighttpd/lighttpd.conf
     echo "accesslog.filename = \"${HTTP_LOG}\"" >>/etc/lighttpd/lighttpd.conf
     echo "server.errorlog = \"${HTTP_LOG}\"" >>/etc/lighttpd/lighttpd.conf
   fi
-
-  echo 'server.modules += ("mod_cgi")
-cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/mod_cgi.conf
 
   lighttpd-angel -f /etc/lighttpd/lighttpd.conf && \
     echo "lighttpd started in port ${HTTP_PORT}"
