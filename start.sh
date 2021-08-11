@@ -7,6 +7,7 @@ test ! -z "$SERVER_NAME" && \
 
 sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
+       -e "s/^my \$pagerefresh =.*/my \$pagerefresh = \'${PAGE_REFRESH}\';/g" \
        /var/www/localhost/htdocs/index.cgi
 
 # configure vnStat

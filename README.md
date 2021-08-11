@@ -89,6 +89,7 @@ services:
       - LARGE_FONTS=0
       - CACHE_TIME=1
       - RATE_UNIT=1
+      - PAGE_REFRESH=0
 
 volumes:
   vnstatdb:
@@ -104,6 +105,7 @@ SERVER_NAME | Name of the server in the web page title | Output of `hostname` co
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
+PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 
 ## Usage tips
 
