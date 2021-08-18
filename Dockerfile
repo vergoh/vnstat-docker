@@ -28,4 +28,4 @@ VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
 
 COPY start.sh /
-CMD /start.sh
+CMD [ "/start.sh" ]
