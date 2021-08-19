@@ -85,6 +85,7 @@ services:
       - vnstatdb:/var/lib/vnstat
     environment:
       - HTTP_PORT=8685
+      - HTTP_BIND=127.0.0.1
       - HTTP_LOG=/dev/stdout
       - LARGE_FONTS=0
       - CACHE_TIME=1
@@ -100,6 +101,7 @@ volumes:
 Name | Description | Default value
 --- | --- | ---
 HTTP_PORT | Port of the web server, use `0` to disable web server | 8586
+HTTP_BIND | Network interface of the web server, use `*` to bind to all interfaces | 127.0.0.1
 HTTP_LOG | Web server log output file, use `/dev/stdout` for output to console and `/dev/null` to disable logging | `/dev/stdout`
 SERVER_NAME | Name of the server in the web page title | Output of `hostname` command
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0

@@ -5,6 +5,7 @@ LABEL repository.git="https://github.com/vergoh/vnstat-docker"
 LABEL repository.docker="https://hub.docker.com/r/vergoh/vnstat"
 
 ENV HTTP_PORT=8586
+ENV HTTP_BIND=127.0.0.1
 ENV HTTP_LOG=/dev/stdout
 ENV LARGE_FONTS=0
 ENV CACHE_TIME=1
