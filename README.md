@@ -22,7 +22,7 @@ and output examples. An example of the included image output is also
 ## Container content
 
 - vnStat daemon (`vnstatd`) is running as the primary process
-- [lighttpd](https://www.lighttpd.net/) provides vnStat image output (`vnstati`) via http (port 8685 by default on all IP addresses)
+- [lighttpd](https://www.lighttpd.net/) provides vnStat image output (`vnstati`) via http (port 8685 on all interfaces by default)
 - vnStat command line (`vnstat`)
 
 ## Supported tags in Docker Hub
@@ -30,7 +30,7 @@ and output examples. An example of the included image output is also
 - [`vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
 - [`vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
 
-Version specific tags are available starting from `2.7` with the latest release being the same as `latest` tag. `latest` and `dev` are automatically built at least monthly to include possible install time updates.
+Version specific tags are available starting from `2.7` with the latest release being the same as `latest` tag. `latest` and `dev` are automatically built at least once every month to include possible build time dependency updates.
 
 Currently `latest` also includes updated versions of `vnstat.cgi` and `vnstat-json.cgi` for improved configurability.
 
@@ -47,7 +47,6 @@ docker run -d \
     --restart=unless-stopped \
     --network=host \
     -e HTTP_PORT=8685 \
-    -e HTTP_BIND=0.0.0.0 \
     -v /etc/localtime:/etc/localtime:ro \
     -v /etc/timezone:/etc/timezone:ro \
     --name vnstat \
@@ -57,8 +56,7 @@ docker run -d \
 - `--network=host` is necessary for accessing the network interfaces of the Docker host instead of being limited to monitoring the container specific interface
 - `--privileged` may need to be used if the date within the container starts from 1970
   - The proper solution would be to update libseccomp2 to a more recent version than currently installed
-- The http server port can be modified using the `HTTP_PORT` environment variable as shown in the example above
-- The http server bind IP address can be modified using the `HTTP_BIND` environment variable as shown in the example above
+- The http server binds by default to all interfaces using the port specified with the `HTTP_PORT` variable. As `--network=host` needs to be enabled, the usual Docker port mapping with `-p` or `--publish` isn't available with this container. Visibility of the http server can be restricted using firewall rules or binding the http server to a specific IP address using the `HTTP_BIND` variable. Localhost access can be enforced by setting `HTTP_BIND` as `127.0.0.1`.
   - See the full list of available environment variables below
 - Image output is available at `http://localhost:8685/` (using default port)
 - Json output is available at `http://localhost:8685/json.cgi` (using default port)
@@ -87,7 +85,7 @@ services:
       - vnstatdb:/var/lib/vnstat
     environment:
       - HTTP_PORT=8685
-      - HTTP_BIND=0.0.0.0
+      - HTTP_BIND=*
       - HTTP_LOG=/dev/stdout
       - LARGE_FONTS=0
       - CACHE_TIME=1
@@ -103,7 +101,7 @@ volumes:
 Name | Description | Default value
 --- | --- | ---
 HTTP_PORT | Port of the http server, use `0` to disable http server | 8586
-HTTP_BIND | IP address for the http server to bind, use `127.0.0.1` to bind only to localhost and prevent remote access | listen on all IP addresses
+HTTP_BIND | IP address for the http server to bind, use `127.0.0.1` to bind only to localhost and prevent remote access | `*`, all addresses
 HTTP_LOG | Http server log output file, use `/dev/stdout` for output to console and `/dev/null` to disable logging | `/dev/stdout`
 SERVER_NAME | Name of the server in the web page title | Output of `hostname` command
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
