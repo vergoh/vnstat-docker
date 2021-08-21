@@ -103,7 +103,7 @@ volumes:
 Name | Description | Default value
 --- | --- | ---
 HTTP_PORT | Port of the http server, use `0` to disable http server | 8586
-HTTP_BIND | IP address for the http server to bind, use `127.0.0.1` to bind only to localhost and prevent remote access | `0.0.0.0`
+HTTP_BIND | IP address for the http server to bind, use `127.0.0.1` to bind only to localhost and prevent remote access | listen on all IP addresses
 HTTP_LOG | Http server log output file, use `/dev/stdout` for output to console and `/dev/null` to disable logging | `/dev/stdout`
 SERVER_NAME | Name of the server in the web page title | Output of `hostname` command
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0

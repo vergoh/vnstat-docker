@@ -25,7 +25,9 @@ server.pid-file      = "/run/lighttpd.pid"
 server.indexfiles = ("index.cgi")
 cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
   echo "server.port = ${HTTP_PORT}" >>/etc/lighttpd/lighttpd.conf
-  echo "server.bind = \"${HTTP_BIND}\"" >>/etc/lighttpd/lighttpd.conf
+  if [ -n "${HTTP_BIND}" ] && [ "${HTTP_BIND}" != "*" ]; then
+    echo "server.bind = \"${HTTP_BIND}\"" >>/etc/lighttpd/lighttpd.conf
+  fi
 
   if [ "${HTTP_LOG}" = "/dev/stdout" ]; then
     exec 3>&1
@@ -38,7 +40,7 @@ cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
   fi
 
   lighttpd-angel -f /etc/lighttpd/lighttpd.conf && \
-    echo "lighttpd started on ${HTTP_BIND}:${HTTP_PORT}"
+    echo "lighttpd started on ${HTTP_BIND:-*}:${HTTP_PORT}"
 fi
 
 # start vnStat daemon
