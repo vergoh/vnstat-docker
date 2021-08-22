@@ -31,6 +31,9 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
 
+      - name: Run Perl::Critic
+        uses: natanlao/perl-critic-action@v1.1
+
       - name: Validate docker-compose.yml
         run: docker-compose config
 
