@@ -12,14 +12,14 @@ ENV CACHE_TIME=1
 ENV RATE_UNIT=1
 ENV PAGE_REFRESH=0
 
-RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev lighttpd && \
+RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev linux-headers lighttpd && \
   wget https://humdi.net/vnstat/vnstat-latest.tar.gz && \
   tar zxvf vnstat-latest.tar.gz && \
   cd vnstat-*/ && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make && make install && \
   cd .. && rm -fr vnstat* && \
-  apk del gcc pkgconf gd-dev make musl-dev sqlite-dev
+  apk del gcc pkgconf gd-dev make musl-dev sqlite-dev linux-headers
 
 COPY vnstat.cgi /var/www/localhost/htdocs/index.cgi
 COPY vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
