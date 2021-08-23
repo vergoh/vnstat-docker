@@ -5,6 +5,10 @@ test ! -z "$SERVER_NAME" && \
   sed -i -e "s/^my \$servername =.*;/my \$servername = \'${SERVER_NAME}\';/g" \
     /var/www/localhost/htdocs/index.cgi
 
+test -d "/dev/shm" && \
+  sed -i -e "s/^my \$tmp_dir =.*/my \$tmp_dir = \'\/dev\/shm\/vnstatcgi\';/g" \
+    /var/www/localhost/htdocs/index.cgi
+
 sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
        -e "s/^my \$pagerefresh =.*/my \$pagerefresh = \'${PAGE_REFRESH}\';/g" \
