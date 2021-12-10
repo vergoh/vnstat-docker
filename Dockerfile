@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:latest AS base
 
 LABEL author="Teemu Toivola"
 LABEL repository.git="https://github.com/vergoh/vnstat-docker"
@@ -12,22 +12,55 @@ ENV CACHE_TIME=1
 ENV RATE_UNIT=1
 ENV PAGE_REFRESH=0
 
-RUN apk add --no-cache gcc musl-dev make perl gd gd-dev sqlite-libs sqlite-dev linux-headers lighttpd && \
-  wget https://humdi.net/vnstat/vnstat-latest.tar.gz && \
-  tar zxvf vnstat-latest.tar.gz && \
-  cd vnstat-*/ && \
-  ./configure --prefix=/usr --sysconfdir=/etc && \
-  make && make install && \
-  cd .. && rm -fr vnstat* && \
-  apk del gcc pkgconf gd-dev make musl-dev sqlite-dev linux-headers && \
-  addgroup -S vnstat && adduser -S -h /var/lib/vnstat -s /sbin/nologin -g vnStat -D -H -G vnstat vnstat
+RUN true \
+    && set -e \
+    && set -x \
+    && apk add --no-cache \
+                gd \
+                perl \
+                lighttpd \
+                sqlite-libs
 
+
+FROM alpine:latest AS builder
+
+RUN true \
+    && set -e \
+    && set -x \
+    && apk add --no-cache \
+                gcc \
+                make \
+                musl-dev \
+                linux-headers \
+                gd-dev \
+                sqlite-dev \
+    && wget https://humdi.net/vnstat/vnstat-latest.tar.gz \
+    && tar zxvf vnstat-latest.tar.gz \
+    && cd vnstat-*/ \
+    && ./configure --prefix=/usr --sysconfdir=/etc \
+    && make && make install
+
+
+FROM base AS runtime
+
+COPY --from=builder /usr/bin/vnstat /usr/bin/vnstat
+COPY --from=builder /usr/bin/vnstati /usr/bin/vnstati
+COPY --from=builder /usr/sbin/vnstatd /usr/sbin/vnstatd
+COPY --from=builder /etc/vnstat.conf /etc/vnstat.conf
+
+RUN true \
+    && set -e \
+    && set -x \
+    && addgroup -S vnstat  \
+    && adduser -S -h /var/lib/vnstat -s /sbin/nologin -g vnStat -D -H -G vnstat vnstat
+
+COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
+COPY start.sh /
 COPY vnstat.cgi /var/www/localhost/htdocs/index.cgi
 COPY vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
-COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
 
 VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
 
-COPY start.sh /
 CMD [ "/start.sh" ]
+HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:${HTTP_PORT}/
