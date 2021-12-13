@@ -13,20 +13,19 @@ ENV RATE_UNIT=1
 ENV PAGE_REFRESH=0
 
 RUN true \
-    && set -e \
-    && set -x \
+    && set -ex \
     && apk add --no-cache \
                 gd \
                 perl \
                 lighttpd \
-                sqlite-libs
+                sqlite-libs \
+                curl
 
 
 FROM alpine:latest AS builder
 
 RUN true \
-    && set -e \
-    && set -x \
+    && set -ex \
     && apk add --no-cache \
                 gcc \
                 make \
@@ -49,8 +48,7 @@ COPY --from=builder /usr/sbin/vnstatd /usr/sbin/vnstatd
 COPY --from=builder /etc/vnstat.conf /etc/vnstat.conf
 
 RUN true \
-    && set -e \
-    && set -x \
+    && set -ex \
     && addgroup -S vnstat  \
     && adduser -S -h /var/lib/vnstat -s /sbin/nologin -g vnStat -D -H -G vnstat vnstat
 
@@ -63,4 +61,5 @@ VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
 
 CMD [ "/start.sh" ]
-HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:${HTTP_PORT}/
+HEALTHCHECK --interval=10s --timeout=3s \
+  CMD curl --silent --fail http://localhost:${HTTP_PORT}/ || exit 1
