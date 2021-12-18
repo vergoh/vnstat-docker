@@ -15,11 +15,11 @@ ENV PAGE_REFRESH=0
 RUN true \
     && set -ex \
     && apk add --no-cache \
-                gd \
-                perl \
-                lighttpd \
-                sqlite-libs \
-                curl
+        gd \
+        perl \
+        lighttpd \
+        sqlite-libs \
+        curl
 
 
 FROM alpine:latest AS builder
@@ -27,17 +27,18 @@ FROM alpine:latest AS builder
 RUN true \
     && set -ex \
     && apk add --no-cache \
-                gcc \
-                make \
-                musl-dev \
-                linux-headers \
-                gd-dev \
-                sqlite-dev \
+        gcc \
+        make \
+        musl-dev \
+        linux-headers \
+        gd-dev \
+        sqlite-dev \
     && wget https://humdi.net/vnstat/vnstat-latest.tar.gz \
     && tar zxvf vnstat-latest.tar.gz \
     && cd vnstat-*/ \
     && ./configure --prefix=/usr --sysconfdir=/etc \
-    && make && make install
+    && make \
+    && make install
 
 
 FROM base AS runtime
@@ -47,6 +48,9 @@ COPY --from=builder /usr/bin/vnstati /usr/bin/vnstati
 COPY --from=builder /usr/sbin/vnstatd /usr/sbin/vnstatd
 COPY --from=builder /etc/vnstat.conf /etc/vnstat.conf
 
+COPY vnstat.cgi /var/www/localhost/htdocs/index.cgi
+COPY vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
+
 RUN true \
     && set -ex \
     && addgroup -S vnstat  \
@@ -54,11 +58,10 @@ RUN true \
 
 COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
 COPY start.sh /
-COPY vnstat.cgi /var/www/localhost/htdocs/index.cgi
-COPY vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
 
 VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
 
 CMD [ "/start.sh" ]
-HEALTHCHECK CMD curl --silent --fail http://localhost:${HTTP_PORT}/ || exit 1
+HEALTHCHECK --interval=5m --timeout=10s --retries=2 CMD \
+    curl --silent --fail http://127.0.0.1:${HTTP_PORT}/ || exit 1
