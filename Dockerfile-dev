@@ -4,13 +4,14 @@ LABEL author="Teemu Toivola"
 LABEL repository.git="https://github.com/vergoh/vnstat-docker"
 LABEL repository.docker="https://hub.docker.com/r/vergoh/vnstat"
 
-ENV HTTP_PORT=8586
+ENV HTTP_PORT=8685
 ENV HTTP_BIND=*
 ENV HTTP_LOG=/dev/stdout
 ENV LARGE_FONTS=0
 ENV CACHE_TIME=1
 ENV RATE_UNIT=1
 ENV PAGE_REFRESH=0
+ENV RUN_VNSTATD=1
 
 RUN true \
     && set -ex \

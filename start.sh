@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [[ "${HTTP_PORT}" -eq 0 && "${RUN_VNSTATD}" -ne 1 ]]; then
+  echo "Error: Invalid configuration, HTTP_PORT cannot be 0 when RUN_VNSTATD is not 1"
+  exit 1
+fi
+
 # configure web content
 test ! -z "$SERVER_NAME" && \
   sed -i -e "s/^my \$servername =.*;/my \$servername = \'${SERVER_NAME}\';/g" \
@@ -43,9 +48,16 @@ cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
     echo "server.errorlog = \"${HTTP_LOG}\"" >>/etc/lighttpd/lighttpd.conf
   fi
 
-  lighttpd-angel -f /etc/lighttpd/lighttpd.conf && \
-    echo "lighttpd started on ${HTTP_BIND:-*}:${HTTP_PORT}"
+  if [ "${RUN_VNSTATD}" -eq 1 ]; then
+    lighttpd-angel -f /etc/lighttpd/lighttpd.conf && \
+      echo "lighttpd started on ${HTTP_BIND:-*}:${HTTP_PORT}"
+  else
+    echo "lighttpd starting on ${HTTP_BIND:-*}:${HTTP_PORT}"
+    exec lighttpd -D -f /etc/lighttpd/lighttpd.conf
+  fi
 fi
 
 # start vnStat daemon
-exec vnstatd -n --user vnstat --group vnstat
+if [ "${RUN_VNSTATD}" -eq 1 ]; then
+  exec vnstatd -n --user vnstat --group vnstat
+fi

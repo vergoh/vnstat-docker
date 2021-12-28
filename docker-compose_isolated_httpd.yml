@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+
+  vnstat:
+    image: vergoh/vnstat:latest
+    container_name: vnstat
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - vnstatdb:/var/lib/vnstat
+    environment:
+      - HTTP_PORT=0
+
+  vnstati:
+    image: vergoh/vnstat:latest
+    container_name: vnstati
+    restart: unless-stopped
+    ports:
+      - "8685:8685"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - vnstatdb:/var/lib/vnstat:ro
+    environment:
+      - HTTP_PORT=8685
+      - HTTP_LOG=/dev/stdout
+      - LARGE_FONTS=0
+      - CACHE_TIME=1
+      - RATE_UNIT=1
+      - PAGE_REFRESH=0
+      - RUN_VNSTATD=0
+
+volumes:
+  vnstatdb:

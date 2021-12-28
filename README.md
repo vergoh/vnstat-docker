@@ -58,6 +58,7 @@ docker run -d \
   - The proper solution would be to update libseccomp2 to a more recent version than currently installed
 - The http server binds by default to all interfaces using the port specified with the `HTTP_PORT` variable. As `--network=host` needs to be enabled, the usual Docker port mapping with `-p` or `--publish` isn't available with this container. Visibility of the http server can be restricted using firewall rules or binding the http server to a specific IP address using the `HTTP_BIND` variable. Localhost access can be enforced by setting `HTTP_BIND` as `127.0.0.1`.
   - See the full list of available environment variables below
+  - Alternatively see the two container solution using docker-compose explained below
 - Image output is available at `http://localhost:8685/` (using default port)
 - Json output is available at `http://localhost:8685/json.cgi` (using default port)
 - Add `-v some_local_directory:/var/lib/vnstat` to map the database directory to the local filesystem if easier access/backups is needed
@@ -70,37 +71,17 @@ docker exec vnstat vnstat --help
 
 ## docker-compose.yml
 
-```text
-version: "3.7"
-services:
+Two example docker-compose compose files are provided:
 
-  vnstat:
-    image: vergoh/vnstat:latest
-    container_name: vnstat
-    restart: unless-stopped
-    network_mode: "host"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - vnstatdb:/var/lib/vnstat
-    environment:
-      - HTTP_PORT=8685
-      - HTTP_BIND=*
-      - HTTP_LOG=/dev/stdout
-      - LARGE_FONTS=0
-      - CACHE_TIME=1
-      - RATE_UNIT=1
-      - PAGE_REFRESH=0
+[`docker-compose.yml`](https://github.com/vergoh/vnstat-docker/blob/master/docker-compose.yml) is the more simple example with both the vnStat daemon and the httpd running in the same container. While this example works without changes for most users, it results in the httpd also using host networking which may not be a wanted feature for some users.
 
-volumes:
-  vnstatdb:
-```
+[`docker-compose_isolated_httpd.yml`](https://github.com/vergoh/vnstat-docker/blob/master/docker-compose_isolated_httpd.yml) consist of two containers running from the same image. The vnStat daemon is running in the first container (`vnstat`) with host networking in order to access all network interfaces but doesn't provide any services or bind to ports. The second container (`vnstati`) doesn't use host networking but provides the httpd which accesses the statistics using a shared volume in read-only mode.
 
 ## Environment variables
 
 Name | Description | Default value
 --- | --- | ---
-HTTP_PORT | Port of the http server, use `0` to disable http server | 8586
+HTTP_PORT | Port of the http server, use `0` to disable http server | 8685
 HTTP_BIND | IP address for the http server to bind, use `127.0.0.1` to bind only to localhost and prevent remote access | `*`, all addresses
 HTTP_LOG | Http server log output file, use `/dev/stdout` for output to console and `/dev/null` to disable logging | `/dev/stdout`
 SERVER_NAME | Name of the server in the web page title | Output of `hostname` command
@@ -108,6 +89,7 @@ LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
+RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 
 ## Usage tips
 
@@ -137,16 +119,12 @@ docker exec vnstat vnstat -i br-20f8582bfc70 --remove --force
     docker exec vnstat vnstat -i br-20f8582bfc70 --add
     ```
 
-3. Notify the daemon
-
-    ```sh
-    docker exec vnstat killall -HUP vnstatd
-    ```
+3. The daemon will notice the change within 5 minutes and start monitoring the interface
 
 ## Troubleshooting
 
 - All images show `no data available` after the container has been started.
-  - The database write interval is 5 minutes so it will take 5 minutes for the initial data to become available.
+  - The database write interval is 5 minutes so it will take up to 5 minutes for the initial data to become available.
 
 - Is the container running?
 
