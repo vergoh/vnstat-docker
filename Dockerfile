@@ -63,5 +63,3 @@ VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
 
 CMD [ "/start.sh" ]
-HEALTHCHECK --interval=5m --timeout=10s --retries=2 CMD \
-    curl --silent --fail http://127.0.0.1:${HTTP_PORT}/ || exit 1
