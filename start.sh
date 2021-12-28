@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [[ "${HTTP_PORT}" -eq 0 && "${RUN_VNSTATD}" -ne 1 ]]; then
+if [ "${HTTP_PORT}" -eq 0 ] && [ "${RUN_VNSTATD}" -ne 1 ]; then
   echo "Error: Invalid configuration, HTTP_PORT cannot be 0 when RUN_VNSTATD is not 1"
   exit 1
 fi
