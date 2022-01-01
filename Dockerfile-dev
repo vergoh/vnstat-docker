@@ -57,7 +57,7 @@ RUN true \
     && adduser -S -h /var/lib/vnstat -s /sbin/nologin -g vnStat -D -H -G vnstat vnstat
 
 COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
-COPY start.sh /
+COPY start-dev.sh /start.sh
 
 VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
