@@ -20,7 +20,7 @@ sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        /var/www/localhost/htdocs/index.cgi
 
 # configure vnStat
-sed -i -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" /etc/vnstat.conf
+sed -i -e 's/^;RateUnit /RateUnit /g' -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" /etc/vnstat.conf
 
 # configure and start httpd if port > 0
 if [ "${HTTP_PORT}" -gt 0 ]; then
@@ -59,5 +59,5 @@ fi
 
 # start vnStat daemon
 if [ "${RUN_VNSTATD}" -eq 1 ]; then
-  exec vnstatd -n --user vnstat --group vnstat
+  exec vnstatd -n -t --user vnstat --group vnstat
 fi
