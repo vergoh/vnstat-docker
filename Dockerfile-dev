@@ -16,6 +16,7 @@ ENV RUN_VNSTATD=1
 RUN true \
     && set -ex \
     && apk add --no-cache \
+        tzdata \
         gd \
         perl \
         lighttpd \

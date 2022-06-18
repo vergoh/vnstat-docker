@@ -54,9 +54,11 @@ docker run -d \
 ```
 
 - `--network=host` is necessary for accessing the network interfaces of the Docker host instead of being limited to monitoring the container specific interface
+- Volumes `/etc/localtime` and `/etc/timezone` are used to configure the container to use the same time zone as the host is using
+  - Alternatively the `TZ` environment variable can be used (`-e TZ=`) with a [supported value](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), localtime and timezone volumes are overridden if used in combination
 - `--privileged` may need to be used if the date within the container starts from 1970
   - The proper solution would be to update libseccomp2 to a more recent version than currently installed
-- The http server binds by default to all interfaces using the port specified with the `HTTP_PORT` variable. As `--network=host` needs to be enabled, the usual Docker port mapping with `-p` or `--publish` isn't available with this container. Visibility of the http server can be restricted using firewall rules or binding the http server to a specific IP address using the `HTTP_BIND` variable. Localhost access can be enforced by setting `HTTP_BIND` as `127.0.0.1`.
+- The http server binds by default to all interfaces using the port specified with the `HTTP_PORT` variable. As `--network=host` needs to be enabled, the usual Docker port mapping with `-p` or `--publish` isn't available with this container. Visibility of the http server can be restricted using firewall rules or binding the http server to a specific IP address using the `HTTP_BIND` variable. Localhost access can be enforced by setting `HTTP_BIND` as `127.0.0.1`
   - See the full list of available environment variables below
   - Alternatively see the two container solution using docker-compose explained below
 - Image output is available at `http://localhost:8685/` (using default port)
@@ -90,6 +92,7 @@ CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
+TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
 
 ## Usage tips
 
@@ -139,7 +142,7 @@ docker exec vnstat vnstat -i br-20f8582bfc70 --remove --force
     ```
 
 - Using a Synology NAS and timezone isn't correct?
-  - Use `/etc/TZ:/etc/localtime:ro` instead of `/etc/localtime:/etc/localtime:ro`
+  - Use `/etc/TZ:/etc/localtime:ro` instead of `/etc/localtime:/etc/localtime:ro` or use the `TZ` environment variable.
 
 - Container log shows `Latest database update is in the future (db: 2037-04-03 18:16:49 > now: 1970-01-01 02:00:00)` or something similar with `now` being in 1970.
   - Use `--privileged` or upgrade libseccomp2 to a much more recent version.
