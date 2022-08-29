@@ -26,7 +26,7 @@ sed -i -e 's/^;RateUnit /RateUnit /g' -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g
 if [ "${HTTP_PORT}" -gt 0 ]; then
 
   echo 'server.compat-module-load = "disable"
-server.modules = ("mod_indexfile", "mod_cgi", "mod_staticfile", "mod_accesslog", "mod_redirect")
+server.modules = ("mod_indexfile", "mod_cgi", "mod_staticfile", "mod_accesslog", "mod_rewrite")
 server.username      = "lighttpd"
 server.groupname     = "lighttpd"
 server.document-root = "/var/www/localhost/htdocs"
