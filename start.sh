@@ -26,12 +26,13 @@ sed -i -e 's/^;RateUnit /RateUnit /g' -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g
 if [ "${HTTP_PORT}" -gt 0 ]; then
 
   echo 'server.compat-module-load = "disable"
-server.modules = ("mod_indexfile", "mod_cgi", "mod_staticfile", "mod_accesslog")
+server.modules = ("mod_indexfile", "mod_cgi", "mod_staticfile", "mod_accesslog", "mod_redirect")
 server.username      = "lighttpd"
 server.groupname     = "lighttpd"
 server.document-root = "/var/www/localhost/htdocs"
 server.pid-file      = "/run/lighttpd.pid"
 server.indexfiles = ("index.cgi")
+url.rewrite-once = ("^/metrics" => "/metrics.cgi")
 cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
   echo "server.port = ${HTTP_PORT}" >>/etc/lighttpd/lighttpd.conf
   if [ -n "${HTTP_BIND}" ] && [ "${HTTP_BIND}" != "*" ]; then
