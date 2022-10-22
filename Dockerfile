@@ -49,9 +49,9 @@ COPY --from=builder /usr/bin/vnstat /usr/bin/vnstat
 COPY --from=builder /usr/bin/vnstati /usr/bin/vnstati
 COPY --from=builder /usr/sbin/vnstatd /usr/sbin/vnstatd
 COPY --from=builder /etc/vnstat.conf /etc/vnstat.conf
-
-COPY vnstat.cgi /var/www/localhost/htdocs/index.cgi
-COPY vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
+COPY --from=builder vnstat/examples/vnstat.cgi /var/www/localhost/htdocs/index.cgi
+COPY --from=builder vnstat/examples/vnstat-json.cgi /var/www/localhost/htdocs/json.cgi
+COPY --from=builder vnstat/examples/vnstat-metrics.cgi /var/www/localhost/htdocs/metrics.cgi
 
 RUN true \
     && set -ex \

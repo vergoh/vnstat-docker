@@ -23,6 +23,7 @@ and output examples. An example of the included image output is also
 
 - vnStat daemon (`vnstatd`) is running as the primary process
 - [lighttpd](https://www.lighttpd.net/) provides vnStat image output (`vnstati`) via http (port 8685 on all interfaces by default)
+  - json and Prometheus compatible metrics endpoints are also available as alternative
 - vnStat command line (`vnstat`)
 
 ## Supported tags in Docker Hub
@@ -31,8 +32,6 @@ and output examples. An example of the included image output is also
 - [`vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
 
 Version specific tags are available starting from `2.7` with the latest release being the same as `latest` tag. `latest` and `dev` are automatically built at least once every month to include possible build time dependency updates.
-
-Currently `latest` also includes updated versions of `vnstat.cgi` and `vnstat-json.cgi` for improved configurability.
 
 ## Building the container
 
@@ -62,7 +61,8 @@ docker run -d \
   - See the full list of available environment variables below
   - Alternatively see the two container solution using docker-compose explained below
 - Image output is available at `http://localhost:8685/` (using default port)
-- Json output is available at `http://localhost:8685/json.cgi` (using default port)
+- JSON output is available at `http://localhost:8685/json.cgi` (using default port)
+- Prometheus compatible metrics endpoint is available at `http://localhost:8685/metrics` (using default port)
 - Add `-v some_local_directory:/var/lib/vnstat` to map the database directory to the local filesystem if easier access/backups is needed
 
 Command line interface can be accessed with:
