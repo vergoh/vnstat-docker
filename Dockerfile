@@ -13,6 +13,9 @@ ENV RATE_UNIT=1
 ENV PAGE_REFRESH=0
 ENV RUN_VNSTATD=1
 
+COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
+COPY start.sh /
+
 RUN true \
     && set -ex \
     && apk add --no-cache \
@@ -57,9 +60,6 @@ RUN true \
     && set -ex \
     && addgroup -S vnstat  \
     && adduser -S -h /var/lib/vnstat -s /sbin/nologin -g vnStat -D -H -G vnstat vnstat
-
-COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
-COPY start.sh /
 
 VOLUME /var/lib/vnstat
 EXPOSE ${HTTP_PORT}
