@@ -26,10 +26,14 @@ and output examples. An example of the included image output is also
   - json and Prometheus compatible metrics endpoints are also available as alternative
 - vnStat command line (`vnstat`)
 
-## Supported tags in Docker Hub
+## Supported tags
 
-- [`vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
-- [`vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
+- GitHub Container Registry
+    - [`ghcr.io/vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
+    - [`ghcr.io/vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
+- Docker Hub
+  - [`vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
+  - [`vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
 
 Version specific tags are available starting from `2.7` with the latest release being the same as `latest` tag. `latest` and `dev` are automatically built at least once every month to include possible build time dependency updates.
 

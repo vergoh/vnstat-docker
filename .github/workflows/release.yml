@@ -78,7 +78,7 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/vnstat:latest
             ghcr.io/${{ github.repository_owner }}/vnstat:${{ env.latest_release }}
           labels: |
-            version=${{ env.latest_release }}
+            org.opencontainers.image.version=${{ env.latest_release }}
 
       - name: image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

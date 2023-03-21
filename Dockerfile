@@ -1,8 +1,10 @@
 FROM alpine:latest AS base
 
-LABEL author="Teemu Toivola"
-LABEL repository.git="https://github.com/vergoh/vnstat-docker"
-LABEL repository.docker="https://hub.docker.com/r/vergoh/vnstat"
+LABEL org.opencontainers.image.authors="Teemu Toivola"
+LABEL org.opencontainers.image.url="https://humdi.net/vnstat/"
+LABEL org.opencontainers.image.source="https://github.com/vergoh/vnstat-docker"
+LABEL org.opencontainers.image.title="vnStat"
+LABEL org.opencontainers.image.description="vnStat (https://humdi.net/vnstat/) in a container with image output via http"
 
 ENV HTTP_PORT=8685
 ENV HTTP_BIND=*
