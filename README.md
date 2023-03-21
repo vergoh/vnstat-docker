@@ -29,8 +29,8 @@ and output examples. An example of the included image output is also
 ## Supported tags
 
 - GitHub Container Registry
-    - [`ghcr.io/vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
-    - [`ghcr.io/vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
+  - [`ghcr.io/vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
+  - [`ghcr.io/vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
 - Docker Hub
   - [`vergoh/vnstat:latest`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile) - [latest released](https://github.com/vergoh/vnstat/releases) vnStat version
   - [`vergoh/vnstat:dev`](https://github.com/vergoh/vnstat-docker/blob/master/Dockerfile-dev) - [latest commit](https://github.com/vergoh/vnstat/commits/master) from GitHub repository
