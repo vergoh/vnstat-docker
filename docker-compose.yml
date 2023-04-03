@@ -17,6 +17,7 @@ services:
       - LARGE_FONTS=0
       - CACHE_TIME=1
       - RATE_UNIT=1
+      - INTERFACE_ORDER=0
       - PAGE_REFRESH=0
 
 volumes:
