@@ -94,6 +94,7 @@ SERVER_NAME | Name of the server in the web page title | Output of `hostname` co
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
+INTERFACE_ORDER | Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
