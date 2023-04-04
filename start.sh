@@ -60,6 +60,19 @@ cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
   fi
 fi
 
+if [ ! -z "${EXCLUDE_PATTERN}" ]; then
+  if [ "${RUN_VNSTATD}" -eq 1 ]; then
+    echo "Interface exclude pattern: ${EXCLUDE_PATTERN}"
+
+    # if database doesn't exist, create and populate it with interfaces not matching the pattern
+    vnstat --dbiflist 1 >/dev/null 2>&1 || \
+      { vnstatd --user vnstat --group vnstat --initdb ; vnstat --iflist ; vnstat --iflist 1 | grep -vE "${EXCLUDE_PATTERN}" | xargs -r -n 1 vnstat --add -i ; }
+
+    # if database exists, remove possible excluded interfaces
+    vnstat --dbiflist 1 | grep -E "${EXCLUDE_PATTERN}" | xargs -r -n 1 vnstat --remove --force -i
+  fi
+fi
+
 # start vnStat daemon
 if [ "${RUN_VNSTATD}" -eq 1 ]; then
   exec vnstatd -n -t --user vnstat --group vnstat

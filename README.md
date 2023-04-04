@@ -97,6 +97,7 @@ RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
 INTERFACE_ORDER | Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
+EXCLUDE_PATTERN | Extended regexp pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
 
 ## Usage tips
