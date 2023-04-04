@@ -60,7 +60,7 @@ cgi.assign = (".cgi" => "/usr/bin/perl")' >/etc/lighttpd/lighttpd.conf
   fi
 fi
 
-if [ ! -z "${EXCLUDE_PATTERN}" ]; then
+if [ -n "${EXCLUDE_PATTERN}" ]; then
   if [ "${RUN_VNSTATD}" -eq 1 ]; then
     echo "Interface exclude pattern: ${EXCLUDE_PATTERN}"
 
