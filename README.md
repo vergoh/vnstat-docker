@@ -63,7 +63,7 @@ docker run -d \
   - The proper solution would be to update libseccomp2 to a more recent version than currently installed
 - The http server binds by default to all interfaces using the port specified with the `HTTP_PORT` variable. As `--network=host` needs to be enabled, the usual Docker port mapping with `-p` or `--publish` isn't available with this container. Visibility of the http server can be restricted using firewall rules or binding the http server to a specific IP address using the `HTTP_BIND` variable. Localhost access can be enforced by setting `HTTP_BIND` as `127.0.0.1`
   - See the full list of available environment variables below
-  - Alternatively see the two container solution using docker-compose explained below
+  - Alternatively see the two container solution using docker compose explained below
 - Image output is available at `http://localhost:8685/` (using default port)
 - JSON output is available at `http://localhost:8685/json.cgi` (using default port)
 - Prometheus compatible metrics endpoint is available at `http://localhost:8685/metrics` (using default port)
@@ -77,7 +77,7 @@ docker exec vnstat vnstat --help
 
 ## docker-compose.yml
 
-Two example docker-compose compose files are provided:
+Two example docker compose files are provided:
 
 [`docker-compose.yml`](https://github.com/vergoh/vnstat-docker/blob/master/docker-compose.yml) is the more simple example with both the vnStat daemon and the httpd running in the same container. While this example works without changes for most users, it results in the httpd also using host networking which may not be a wanted feature for some users.
 
