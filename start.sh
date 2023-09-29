@@ -16,6 +16,7 @@ test -d "/dev/shm" && \
 
 sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
+       -e "s/^my \$darkmode =.*/my \$darkmode = \'${DARK_MODE}\';/g" \
        -e "s/^my \$pagerefresh =.*/my \$pagerefresh = \'${PAGE_REFRESH}\';/g" \
        /var/www/localhost/htdocs/index.cgi
 

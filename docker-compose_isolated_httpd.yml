@@ -29,8 +29,9 @@ services:
       - LARGE_FONTS=0
       - CACHE_TIME=1
       - RATE_UNIT=1
-      - PAGE_REFRESH=0
       - INTERFACE_ORDER=0
+      - DARK_MODE=0
+      - PAGE_REFRESH=0
       - RUN_VNSTATD=0
 
 volumes:

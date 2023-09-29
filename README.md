@@ -95,6 +95,7 @@ LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
 INTERFACE_ORDER | Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias | 0
+DARK_MODE | Black background and inverted image colors, 0: disabled, 1: enabled without rx/tx color inversion, 2: enabled for all colors (available starting from version 2.12) | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 EXCLUDE_PATTERN | Extended regexp pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
