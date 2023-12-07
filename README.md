@@ -94,7 +94,9 @@ SERVER_NAME | Name of the server in the web page title | Output of `hostname` co
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
+INTERFACE | Default interface for queries, leave empty or unset for automatic selection | *unset*
 INTERFACE_ORDER | Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias | 0
+QUERY_MODE | Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values | 0
 DARK_MODE | Black background and inverted image colors, 0: disabled, 1: enabled without rx/tx color inversion, 2: enabled for all colors (available starting from version 2.12) | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1

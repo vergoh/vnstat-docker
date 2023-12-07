@@ -22,7 +22,9 @@ sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
 
 # configure vnStat
 sed -i -e 's/^;RateUnit /RateUnit /g' -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" \
+       -e 's/^;Interface /Interface /g' -e "s/^Interface .*/Interface \"${INTERFACE}\"/g" \
        -e 's/^;InterfaceOrder /InterfaceOrder /g' -e "s/^InterfaceOrder .*/InterfaceOrder ${INTERFACE_ORDER}/g" \
+       -e 's/^;QueryMode /QueryMode /g' -e "s/^QueryMode .*/QueryMode ${QUERY_MODE}/g" \
        /etc/vnstat.conf
 
 # configure and start httpd if port > 0
