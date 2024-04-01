@@ -21,11 +21,36 @@ sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        /var/www/localhost/htdocs/index.cgi
 
 # configure vnStat
-sed -i -e 's/^;RateUnit /RateUnit /g' -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" \
-       -e 's/^;Interface /Interface /g' -e "s/^Interface .*/Interface \"${INTERFACE}\"/g" \
-       -e 's/^;InterfaceOrder /InterfaceOrder /g' -e "s/^InterfaceOrder .*/InterfaceOrder ${INTERFACE_ORDER}/g" \
-       -e 's/^;QueryMode /QueryMode /g' -e "s/^QueryMode .*/QueryMode ${QUERY_MODE}/g" \
-       /etc/vnstat.conf
+test ! -z "${RATE_UNIT}" && {
+  echo "Warning: Environment variable RATE_UNIT has been deprecated, please start using VNSTAT_RateUnit instead" ;
+  sed -i -e 's/^;RateUnit /RateUnit /g' -e "s/^RateUnit .*/RateUnit ${RATE_UNIT}/g" /etc/vnstat.conf ;
+  echo "Configuration 'RateUnit' set with value '${RATE_UNIT}'" ;
+}
+test ! -z "${INTERFACE_ORDER}" && {
+  echo "Warning: Environment variable INTERFACE_ORDER has been deprecated, please start using VNSTAT_InterfaceOrder instead" ;
+  sed -i -e 's/^;InterfaceOrder /InterfaceOrder /g' -e "s/^InterfaceOrder .*/InterfaceOrder ${INTERFACE_ORDER}/g" /etc/vnstat.conf ;
+  echo "Configuration 'InterfaceOrder' set with value '${INTERFACE_ORDER}'" ;
+}
+test ! -z "${QUERY_MODE}" && {
+  echo "Warning: Environment variable QUERY_MODE has been deprecated, please start using VNSTAT_QueryMode instead" ;
+  sed -i -e 's/^;QueryMode /QueryMode /g' -e "s/^QueryMode .*/QueryMode ${QUERY_MODE}/g" /etc/vnstat.conf ;
+  echo "Configuration 'QueryMode' set with value '${QUERY_MODE}'" ;
+}
+test ! -z "${INTERFACE}" && {
+  echo "Warning: Environment variable INTERFACE has been deprecated, please start using VNSTAT_Interface instead" ;
+  sed -i -e 's/^;Interface /Interface /g' -e "s/^Interface .*/Interface ${INTERFACE}/g" /etc/vnstat.conf ;
+  echo "Configuration 'Interface' set with value '${INTERFACE}'" ;
+}
+
+env | grep -E '^VNSTAT_' | cut -d_ -f2- | while read -r e
+do
+  key=$(echo "${e}" | cut -d= -f1)
+  value=$(echo "${e}" | cut -d= -f2-)
+  test -z "${key}" && continue
+  test -z "${value}" && continue
+  sed -i -e "s/^;${key} /${key} /g" -e "s/^${key} .*/${key} ${value}/g" /etc/vnstat.conf
+  grep -qE "^${key} " /etc/vnstat.conf && echo "Configuration '${key}' set with value '${value}'"
+done
 
 # configure and start httpd if port > 0
 if [ "${HTTP_PORT}" -gt 0 ]; then

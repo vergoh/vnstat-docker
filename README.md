@@ -59,11 +59,11 @@ docker run -d \
 - `--network=host` is necessary for accessing the network interfaces of the Docker host instead of being limited to monitoring the container specific interface
 - Volumes `/etc/localtime` and `/etc/timezone` are used to configure the container to use the same time zone as the host is using
   - Alternatively the `TZ` environment variable can be used (`-e TZ=`) with a [supported value](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), localtime and timezone volumes are overridden if used in combination
-- `--privileged` may need to be used if the date within the container starts from 1970
+- `--privileged` may need to be used **if** the date within the container starts from 1970
   - The proper solution would be to update libseccomp2 to a more recent version than currently installed
 - The http server binds by default to all interfaces using the port specified with the `HTTP_PORT` variable. As `--network=host` needs to be enabled, the usual Docker port mapping with `-p` or `--publish` isn't available with this container. Visibility of the http server can be restricted using firewall rules or binding the http server to a specific IP address using the `HTTP_BIND` variable. Localhost access can be enforced by setting `HTTP_BIND` as `127.0.0.1`
   - See the full list of available environment variables below
-  - Alternatively see the two container solution using docker compose explained below
+  - Alternatively see the two container solution with unprivileged http server using docker compose explained below
 - Image output is available at `http://localhost:8685/` (using default port)
 - JSON output is available at `http://localhost:8685/json.cgi` (using default port)
 - Prometheus compatible metrics endpoint is available at `http://localhost:8685/metrics` (using default port)
@@ -93,15 +93,16 @@ HTTP_LOG | Http server log output file, use `/dev/stdout` for output to console 
 SERVER_NAME | Name of the server in the web page title | Output of `hostname` command
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
-RATE_UNIT | Used traffic rate unit, 0: bytes, 1: bits | 1
-INTERFACE | Default interface for queries, leave empty or unset for automatic selection | *unset*
-INTERFACE_ORDER | Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias | 0
-QUERY_MODE | Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values | 0
 DARK_MODE | Black background and inverted image colors, 0: disabled, 1: enabled without rx/tx color inversion, 2: enabled for all colors (available starting from version 2.12) | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 EXCLUDE_PATTERN | Extended regexp pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
+VNSTAT_ prefix | All [vnstat.conf configurations](https://humdi.net/vnstat/man/vnstat.conf.html) can be modified using a VNSTAT_ prefixed variable followed with the configuration keyword. For example, changing `CRx` (color for received data) to `79C999` (pale teal) can be done by defining `VNSTAT_CRx=79C999`. Variable name is case sensitive. | *unset*
+~~RATE_UNIT~~ | ~~Used traffic rate unit, 0: bytes, 1: bits.~~ **Deprecated.** Use VNSTAT_RateUnit instead. | 1
+~~INTERFACE~~ | ~~Default interface for queries, leave empty or unset for automatic selection.~~ **Deprecated.** Use VNSTAT_Interface instead. | *unset*
+~~INTERFACE_ORDER~~ | ~~Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias.~~ **Deprecated.** Use VNSTAT_InterfaceOrder instead. | 0
+~~QUERY_MODE~~ | ~~Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values.~~ **Deprecated.** Use VNSTAT_QueryMode instead. | 0
 
 ## Usage tips
 

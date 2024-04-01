@@ -16,11 +16,11 @@ services:
       - HTTP_LOG=/dev/stdout
       - LARGE_FONTS=0
       - CACHE_TIME=1
-      - RATE_UNIT=1
-      - INTERFACE_ORDER=0
-      - QUERY_MODE=0
       - DARK_MODE=0
       - PAGE_REFRESH=0
+      - VNSTAT_RateUnit=1
+      - VNSTAT_InterfaceOrder=0
+      - VNSTAT_QueryMode=0
 
 volumes:
   vnstatdb:
