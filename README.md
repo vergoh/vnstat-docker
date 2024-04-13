@@ -95,6 +95,8 @@ LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 DARK_MODE | Black background and inverted image colors, 0: disabled, 1: enabled without rx/tx color inversion, 2: enabled for all colors (available starting from version 2.12) | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
+INDEX_IMAGES_PER_ROW | Number of images to show per row on the index page when the database contains more than one interface (1000: auto fit) (available starting from version 2.13) | 1
+INDEX_IMAGE_OUTPUT | [Image output](https://humdi.net/vnstat/man/vnstati.html) to use on index page when the database contains more than one interface (available starting from version 2.13) | `hs`
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 EXCLUDE_PATTERN | Extended regexp pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*

@@ -30,6 +30,8 @@ services:
       - CACHE_TIME=1
       - DARK_MODE=0
       - PAGE_REFRESH=0
+      - INDEX_IMAGES_PER_ROW=1
+      - INDEX_IMAGE_OUTPUT=hs
       - VNSTAT_RateUnit=1
       - VNSTAT_InterfaceOrder=0
       - VNSTAT_QueryMode=0
