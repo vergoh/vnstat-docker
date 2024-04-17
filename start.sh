@@ -20,6 +20,8 @@ sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$pagerefresh =.*/my \$pagerefresh = \'${PAGE_REFRESH}\';/g" \
        -e "s/^my \$indeximagesperrow =.*/my \$indeximagesperrow = \'${INDEX_IMAGES_PER_ROW}\';/g" \
        -e "s/^my \$indeximageoutput =.*/my \$indeximageoutput = \'${INDEX_IMAGE_OUTPUT}\';/g" \
+       -e "s/^my \$indexshowninterfaces =.*/my \$indexshowninterfaces = \'${INDEX_SHOWN_INTERFACES}\';/g" \
+       -e "s/^my \$indexhiddeninterfaces =.*/my \$indexhiddeninterfaces = \'${INDEX_HIDDEN_INTERFACES}\';/g" \
        /var/www/localhost/htdocs/index.cgi
 
 # configure vnStat

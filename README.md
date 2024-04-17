@@ -95,16 +95,23 @@ LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 DARK_MODE | Black background and inverted image colors, 0: disabled, 1: enabled without rx/tx color inversion, 2: enabled for all colors (available starting from version 2.12) | 0
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
+RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 INDEX_IMAGES_PER_ROW | Number of images to show per row on the index page when the database contains more than one interface (1000: auto fit) (available starting from version 2.13) | 1
 INDEX_IMAGE_OUTPUT | [Image output](https://humdi.net/vnstat/man/vnstati.html) to use on index page when the database contains more than one interface (available starting from version 2.13) | `hs`
-RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
-EXCLUDE_PATTERN | Extended regexp pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
+INDEX_SHOWN_INTERFACES | Regular expression pattern for selecting which interfaces are shown on the index page when the database containe more than one interface. Leave empty or unset to disable filter. All not shown interfaces will still be monitored. (available starting from version 2.13) | *unset*
+INDEX_HIDDEN_INTERFACES | Regular expression pattern for selecting which interfaces are hidden from the index page when the database containe more than one interface. Leave empty or unset to disable filter. All hidden interfaces will still be monitored. (available starting from version 2.13) | *unset*
+EXCLUDE_PATTERN | Extended regular expression pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
 VNSTAT_ prefix | All [vnstat.conf configurations](https://humdi.net/vnstat/man/vnstat.conf.html) can be modified using a VNSTAT_ prefixed variable followed with the configuration keyword. For example, changing `CRx` (color for received data) to `79C999` (pale teal) can be done by defining `VNSTAT_CRx=79C999`. Variable name is case sensitive. | *unset*
-~~RATE_UNIT~~ | ~~Used traffic rate unit, 0: bytes, 1: bits.~~ **Deprecated.** Use VNSTAT_RateUnit instead. | 1
-~~INTERFACE~~ | ~~Default interface for queries, leave empty or unset for automatic selection.~~ **Deprecated.** Use VNSTAT_Interface instead. | *unset*
-~~INTERFACE_ORDER~~ | ~~Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias.~~ **Deprecated.** Use VNSTAT_InterfaceOrder instead. | 0
-~~QUERY_MODE~~ | ~~Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values.~~ **Deprecated.** Use VNSTAT_QueryMode instead. | 0
+
+### Deprecated environment variables
+
+Name | Description | Default value
+--- | --- | ---
+RATE_UNIT | ~~Used traffic rate unit, 0: bytes, 1: bits.~~ **Deprecated.** Use VNSTAT_RateUnit instead. | 1
+INTERFACE | ~~Default interface for queries, leave empty or unset for automatic selection.~~ **Deprecated.** Use VNSTAT_Interface instead. | *unset*
+INTERFACE_ORDER | ~~Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias.~~ **Deprecated.** Use VNSTAT_InterfaceOrder instead. | 0
+QUERY_MODE | ~~Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values.~~ **Deprecated.** Use VNSTAT_QueryMode instead. | 0
 
 ## Usage tips
 
