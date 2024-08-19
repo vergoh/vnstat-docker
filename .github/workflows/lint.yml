@@ -19,20 +19,11 @@ jobs:
       - name: Run Perl::Critic
         uses: natanlao/perl-critic-action@v1.1
 
-      - name: Show docker-compose (v1) version
-        run: docker-compose version
-
-      - name: Show docker compose (v2) version
+      - name: Show docker compose version
         run: docker compose version
 
-      - name: Validate docker-compose.yml (v1)
-        run: docker-compose -f docker-compose.yml config
-
-      - name: Validate docker-compose_isolated_httpd.yml (v1)
-        run: docker-compose -f docker-compose_isolated_httpd.yml config
-
-      - name: Validate docker-compose.yml (v2)
+      - name: Validate docker-compose.yml
         run: docker compose -f docker-compose.yml config
 
-      - name: Validate docker-compose_isolated_httpd.yml (v2)
+      - name: Validate docker-compose_isolated_httpd.yml
         run: docker compose -f docker-compose_isolated_httpd.yml config
