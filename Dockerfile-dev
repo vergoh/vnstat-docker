@@ -27,8 +27,7 @@ RUN true \
         gd \
         perl \
         lighttpd \
-        sqlite-libs \
-        curl
+        sqlite-libs
 
 
 FROM alpine:latest AS builder
