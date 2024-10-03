@@ -61,7 +61,7 @@ COPY --from=builder vnstat-*/examples/vnstat-metrics.cgi /var/www/localhost/htdo
 
 RUN true \
     && set -ex \
-    && addgroup -S vnstat  \
+    && addgroup -S vnstat \
     && adduser -S -h /var/lib/vnstat -s /sbin/nologin -g vnStat -D -H -G vnstat vnstat
 
 VOLUME /var/lib/vnstat
