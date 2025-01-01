@@ -107,5 +107,5 @@ fi
 
 # start vnStat daemon
 if [ "${RUN_VNSTATD}" -eq 1 ]; then
-  exec vnstatd -n -t --user vnstat --group vnstat
+  exec vnstatd --nodaemon --timestamp --user vnstat --group vnstat
 fi
