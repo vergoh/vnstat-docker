@@ -33,7 +33,7 @@ jobs:
 
   docker:
     needs: lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: Dockerfile-dev
-          platforms: linux/amd64,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: |
             vergoh/vnstat:dev
