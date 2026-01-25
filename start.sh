@@ -22,6 +22,7 @@ sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$indeximageoutput =.*/my \$indeximageoutput = \'${INDEX_IMAGE_OUTPUT}\';/g" \
        -e "s/^my \$indexshowninterfaces =.*/my \$indexshowninterfaces = \'${INDEX_SHOWN_INTERFACES}\';/g" \
        -e "s/^my \$indexhiddeninterfaces =.*/my \$indexhiddeninterfaces = \'${INDEX_HIDDEN_INTERFACES}\';/g" \
+       -e "s/^my \$usecfglengthonsingleimagepages =.*/my \$usecfglengthonsingleimagepages = \'1\';/g" \
        /var/www/localhost/htdocs/index.cgi
 
 # configure vnStat
@@ -45,6 +46,14 @@ test ! -z "${INTERFACE}" && {
   sed -i -e 's/^;Interface /Interface /g' -e "s/^Interface .*/Interface ${INTERFACE}/g" /etc/vnstat.conf ;
   echo "Configuration 'Interface' set with value '${INTERFACE}'" ;
 }
+
+sed -i -e "s/^;List5Mins .*/List5Mins 60/g" \
+       -e "s/^;ListHours .*/ListHours 48/g" \
+       -e "s/^;ListDays .*/ListDays 60/g" \
+       -e "s/^;ListMonths .*/ListMonths 24/g" \
+       -e "s/^;ListYears .*/ListYears 0/g" \
+       -e "s/^;ListTop .*/ListTop 20/g" \
+       /etc/vnstat.conf
 
 env | grep -E '^VNSTAT_' | cut -d_ -f2- | while read -r e
 do
