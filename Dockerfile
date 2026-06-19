@@ -41,7 +41,12 @@ RUN true \
         linux-headers \
         gd-dev \
         sqlite-dev \
-    && wget https://humdi.net/vnstat/vnstat-latest.tar.gz \
+        gnupg \
+        wget \
+    && gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys 0xDAFE84E63D140114 \
+    && wget --no-verbose https://humdi.net/vnstat/vnstat-latest.tar.gz \
+    && wget --no-verbose https://humdi.net/vnstat/vnstat-latest.tar.gz.asc \
+    && gpg --batch --verify vnstat-latest.tar.gz.asc vnstat-latest.tar.gz \
     && tar zxvf vnstat-latest.tar.gz \
     && cd vnstat-*/ \
     && ./configure --prefix=/usr --sysconfdir=/etc \
