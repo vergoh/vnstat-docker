@@ -21,10 +21,11 @@ and output examples. An example of the included image output is also
 
 ## Container content
 
+- vnStat command line (`vnstat`)
 - vnStat daemon (`vnstatd`) is running as the primary process
 - [lighttpd](https://www.lighttpd.net/) provides vnStat image output (`vnstati`) via http (port 8685 on all interfaces by default)
   - json and Prometheus compatible metrics endpoints are also available as alternative
-- vnStat command line (`vnstat`)
+- [Apprise](https://github.com/caronc/apprise) and [supercronic](https://github.com/aptible/supercronic) are included for scheduled notifications (disabled by default)
 
 ## Supported tags
 
@@ -81,7 +82,7 @@ Two example docker compose files are provided:
 
 [`docker-compose.yml`](https://github.com/vergoh/vnstat-docker/blob/master/docker-compose.yml) is the more simple example with both the vnStat daemon and the httpd running in the same container. While this example works without changes for most users, it results in the httpd also using host networking which may not be a wanted feature for some users.
 
-[`docker-compose_isolated_httpd.yml`](https://github.com/vergoh/vnstat-docker/blob/master/docker-compose_isolated_httpd.yml) consist of two containers running from the same image. The vnStat daemon is running in the first container (`vnstat`) with host networking in order to access all network interfaces but doesn't provide any services or bind to ports. The second container (`vnstati`) doesn't use host networking but provides the httpd which accesses the statistics using a shared volume in read-only mode.
+[`docker-compose_isolated_example.yml`](https://github.com/vergoh/vnstat-docker/blob/master/docker-compose_isolated_example.yml) consist of three containers running from the same image. The vnStat daemon is running in the first container (`vnstat`) with host networking in order to access all network interfaces but doesn't provide any services or bind to ports. The second container (`vnstati`) doesn't use host networking but provides the httpd which accesses the statistics using a shared volume in read-only mode. The third container (`vnstat-notify`) runs only the notification scheduler and also accesses the statistics database using a shared volume in read-only mode. Note that the third container doesn't have valid `APPRISE_URLS` configured by default.
 
 ## Environment variables
 
@@ -103,6 +104,37 @@ INDEX_HIDDEN_INTERFACES | Regular expression pattern for selecting which interfa
 EXCLUDE_PATTERN | Extended regular expression pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
 VNSTAT_ prefix | All [vnstat.conf configurations](https://humdi.net/vnstat/man/vnstat.conf.html) can be modified using a VNSTAT_ prefixed variable followed with the configuration keyword. For example, changing `CRx` (color for received data) to `79C999` (pale teal) can be done by defining `VNSTAT_CRx=79C999`. Variable name is case sensitive. | *unset*
+
+### Notifications
+
+When `APPRISE_URLS` is set, the container runs [supercronic](https://github.com/aptible/supercronic) to schedule `vnstat` queries at the configured interval. If the query produces any output, that output will be sent to configured destinations using [Apprise](https://github.com/caronc/apprise). Leave `APPRISE_URLS` unset or empty to disable notifications.
+
+Name | Description | Default value
+--- | --- | ---
+APPRISE_URLS | [Apprise destination URL](https://github.com/caronc/apprise#supported-notifications)(s), comma or space separated. Enables notification when set | *unset*
+NOTIFY_CRON | 5-field [cron](https://en.wikipedia.org/wiki/Cron) schedule syntax | *unset*
+NOTIFY_TITLE | Message title | `vnStat`
+NOTIFY_VNSTAT_ARGS | Arguments passed to `vnstat`, space-separated | *unset*
+
+#### Configuration examples
+
+Summary at 23:58 daily:
+
+```yaml
+- APPRISE_URLS=discord://webhook_id/webhook_token
+- NOTIFY_CRON=58 23 * * *
+- NOTIFY_VNSTAT_ARGS=-s
+- NOTIFY_TITLE=Traffic summary
+```
+
+Day level eth0 interface traffic limit alert once 10GB total (rx+tx) is reached, checked every 15 minutes:
+
+```yaml
+- APPRISE_URLS=signal://hostname:port/FromPhoneNo
+- NOTIFY_CRON=*/15 * * * *
+- NOTIFY_VNSTAT_ARGS=--alert 3 0 d total 10 GB -i eth0
+- NOTIFY_TITLE=Traffic limit alert
+```
 
 ### Deprecated environment variables
 

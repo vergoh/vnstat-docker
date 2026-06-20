@@ -19,6 +19,7 @@ ENV RUN_VNSTATD=1
 
 COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
 COPY start.sh /
+COPY vnstat-notify.sh /usr/local/bin/vnstat-notify.sh
 
 RUN true \
     && set -ex \
@@ -27,7 +28,9 @@ RUN true \
         gd \
         perl \
         lighttpd \
-        sqlite-libs
+        sqlite-libs \
+        apprise \
+        supercronic
 
 
 FROM alpine:latest AS builder

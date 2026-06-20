@@ -22,5 +22,5 @@ jobs:
       - name: Validate docker-compose.yml
         run: docker compose -f docker-compose.yml config
 
-      - name: Validate docker-compose_isolated_httpd.yml
-        run: docker compose -f docker-compose_isolated_httpd.yml config
+      - name: Validate docker-compose_isolated_example.yml
+        run: docker compose -f docker-compose_isolated_example.yml config

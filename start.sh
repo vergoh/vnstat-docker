@@ -1,9 +1,60 @@
 #!/bin/sh
 
-if [ "${HTTP_PORT}" -eq 0 ] && [ "${RUN_VNSTATD}" -ne 1 ]; then
-  echo "Error: Invalid configuration, HTTP_PORT cannot be 0 when RUN_VNSTATD is not 1"
+if [ "${HTTP_PORT}" -eq 0 ] && [ "${RUN_VNSTATD}" -ne 1 ] && [ -z "${APPRISE_URLS}" ]; then
+  echo "Error: Invalid configuration, HTTP_PORT cannot be 0 when RUN_VNSTATD is not 1 and APPRISE_URLS is not set"
   exit 1
 fi
+
+NOTIFY_CRONTAB="/etc/vnstat-notify.crontab"
+
+notify_quote() {
+  printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"
+}
+
+configure_notification_scheduler() {
+  if [ -z "${APPRISE_URLS}" ]; then
+    echo "Error: APPRISE_URLS must not be empty"
+    exit 1
+  fi
+
+  if [ -z "${NOTIFY_CRON}" ]; then
+    echo "Error: NOTIFY_CRON must be set when APPRISE_URLS is set"
+    exit 1
+  fi
+
+  if [ "$(printf '%s' "${NOTIFY_CRON}" | wc -w | tr -d '[:space:]')" -ne 5 ]; then
+    echo "Error: NOTIFY_CRON must contain exactly 5 space-separated fields"
+    exit 1
+  fi
+
+  if [ -z "${NOTIFY_VNSTAT_ARGS}" ]; then
+    echo "Error: NOTIFY_VNSTAT_ARGS must be set when APPRISE_URLS is set"
+    exit 1
+  fi
+
+  {
+    printf "APPRISE_URLS=%s\n" "$(notify_quote "${APPRISE_URLS}")"
+    printf "NOTIFY_VNSTAT_ARGS=%s\n" "$(notify_quote "${NOTIFY_VNSTAT_ARGS}")"
+    printf "NOTIFY_TITLE=%s\n" "$(notify_quote "${NOTIFY_TITLE:-vnStat}")"
+    printf "SERVER_NAME=%s\n" "$(notify_quote "${SERVER_NAME:-}")"
+  } >/etc/vnstat-notify.env
+
+  chown vnstat:vnstat /etc/vnstat-notify.env
+  chmod 600 /etc/vnstat-notify.env
+
+  printf '%s su vnstat -s /bin/sh -c /usr/local/bin/vnstat-notify.sh\n' "${NOTIFY_CRON}" >"${NOTIFY_CRONTAB}"
+  supercronic -test "${NOTIFY_CRONTAB}" || exit 1
+}
+
+start_notification_scheduler() {
+  if [ "${RUN_VNSTATD}" -eq 0 ] && [ "${HTTP_PORT}" -eq 0 ]; then
+    echo "Notification scheduler starting (cron-only mode, ${NOTIFY_CRON})"
+    exec supercronic -no-reap -split-logs "${NOTIFY_CRONTAB}"
+  else
+    echo "Notification scheduler starting (${NOTIFY_CRON})"
+    supercronic -no-reap -split-logs "${NOTIFY_CRONTAB}" &
+  fi
+}
 
 # configure web content
 test ! -z "$SERVER_NAME" && \
@@ -64,6 +115,12 @@ do
   sed -i -e "s/^;${key} /${key} /g" -e "s/^${key} .*/${key} ${value}/g" /etc/vnstat.conf
   grep -qE "^${key} " /etc/vnstat.conf && echo "Configuration '${key}' set with value '${value}'"
 done
+
+# configure and start notification scheduler if enabled
+if [ -n "${APPRISE_URLS}" ]; then
+  configure_notification_scheduler
+  start_notification_scheduler
+fi
 
 # configure and start httpd if port > 0
 if [ "${HTTP_PORT}" -gt 0 ]; then
