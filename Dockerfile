@@ -29,6 +29,9 @@ RUN true \
         perl \
         lighttpd \
         sqlite-libs \
+        font-dejavu \
+        font-noto \
+        font-liberation \
         apprise \
         supercronic
 
