@@ -112,7 +112,7 @@ do
   value=$(echo "${e}" | cut -d= -f2-)
   test -z "${key}" && continue
   test -z "${value}" && continue
-  sed -i -e "s/^;${key} /${key} /g" -e "s/^${key} .*/${key} ${value}/g" /etc/vnstat.conf
+  sed -i -e "s|^;${key} |${key} |g" -e "s|^${key} .*|${key} ${value}|g" /etc/vnstat.conf
   grep -qE "^${key} " /etc/vnstat.conf && echo "Configuration '${key}' set with value '${value}'"
 done
 
