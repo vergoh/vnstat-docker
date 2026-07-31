@@ -103,6 +103,8 @@ INDEX_SHOWN_INTERFACES | Regular expression pattern for selecting which interfac
 INDEX_HIDDEN_INTERFACES | Regular expression pattern for selecting which interfaces are hidden from the index page when the database contains more than one interface. Leave empty or unset to disable filter. All hidden interfaces will still be monitored. (available starting from version 2.13) | *unset*
 EXCLUDE_PATTERN | Extended regular expression pattern for excluding interfaces from getting monitored. For example, `^docker\|^veth\|^br-\|^lxc` would exclude interface names starting with `docker`, `veth`, `br-` and `lxc`. | *unset*
 TZ | Set time zone ([list of supported values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)), overrides configuration from possible `/etc/localtime` and `/etc/timezone` volumes | *unset*
+VNSTAT_FontFile | Full path to TrueType font file to use in images. Set to empty (`""`) to use LibGD's built-in fonts instead. font-dejavu, font-noto and font-liberation have been pre-installed in the container. Both monospaced and non-monospaced fonts are supported. (available starting from version 2.14) | `/usr/share/fonts/dejavu/DejaVuSansMono.ttf`
+VNSTAT_FontSize | Font size when using a TrueType font due to `FontFile` being set. Multiplied with 1.5 if `LARGE_FONTS` is enabled. (available starting from version 2.14) | 9
 VNSTAT_ prefix | All [vnstat.conf configurations](https://humdi.net/vnstat/man/vnstat.conf.html) can be modified using a VNSTAT_ prefixed variable followed with the configuration keyword. For example, changing `CRx` (color for received data) to `79C999` (pale teal) can be done by defining `VNSTAT_CRx=79C999`. Variable name is case sensitive. | *unset*
 
 ### Notifications
@@ -138,12 +140,12 @@ Day level eth0 interface traffic limit alert once 10GB total (rx+tx) is reached,
 
 ### Deprecated environment variables
 
-Name | Description | Default value
---- | --- | ---
-RATE_UNIT | ~~Used traffic rate unit, 0: bytes, 1: bits.~~ **Deprecated.** Use VNSTAT_RateUnit instead. | 1
-INTERFACE | ~~Default interface for queries, leave empty or unset for automatic selection.~~ **Deprecated.** Use VNSTAT_Interface instead. | *unset*
-INTERFACE_ORDER | ~~Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias.~~ **Deprecated.** Use VNSTAT_InterfaceOrder instead. | 0
-QUERY_MODE | ~~Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values.~~ **Deprecated.** Use VNSTAT_QueryMode instead. | 0
+Name | Description | Default value | Replaced with
+--- | --- | --- | ---
+RATE_UNIT | ~~Used traffic rate unit, 0: bytes, 1: bits.~~ **Deprecated.** | 1 | VNSTAT_RateUnit
+INTERFACE | ~~Default interface for queries, leave empty or unset for automatic selection.~~ **Deprecated.** | *unset* | VNSTAT_Interface
+INTERFACE_ORDER | ~~Interface order when multiple interfaces are shown, 0: alphabetical by name, 1: alphabetical by alias.~~ **Deprecated.** | 0 | VNSTAT_InterfaceOrder
+QUERY_MODE | ~~Default command line query when none is specified, see [QueryMode in documentation](https://humdi.net/vnstat/man/vnstat.conf.html) for supported values.~~ **Deprecated.** | 0 | VNSTAT_QueryMode
 
 ## Usage tips
 

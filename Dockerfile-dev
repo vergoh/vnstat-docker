@@ -16,6 +16,8 @@ ENV PAGE_REFRESH=0
 ENV INDEX_IMAGES_PER_ROW=1
 ENV INDEX_IMAGE_OUTPUT=hs
 ENV RUN_VNSTATD=1
+ENV VNSTAT_FontFile=/usr/share/fonts/dejavu/DejaVuSansMono.ttf
+ENV VNSTAT_FontSize=9
 
 COPY favicon.ico /var/www/localhost/htdocs/favicon.ico
 COPY start.sh /
