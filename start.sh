@@ -104,6 +104,7 @@ sed -i -e "s/^;List5Mins .*/List5Mins 60/g" \
        -e "s/^;ListMonths .*/ListMonths 24/g" \
        -e "s/^;ListYears .*/ListYears 0/g" \
        -e "s/^;ListTop .*/ListTop 20/g" \
+       -e "s/^;5MinuteHours .*/5MinuteHours 60/g" \
        /etc/vnstat.conf
 
 env | grep -E '^VNSTAT_' | cut -d_ -f2- | while read -r e
