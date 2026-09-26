@@ -68,6 +68,7 @@ test -d "/dev/shm" && \
 sed -i -e "s/^my \$largefonts =.*;/my \$largefonts = \'${LARGE_FONTS}\';/g" \
        -e "s/^my \$cachetime =.*/my \$cachetime = \'${CACHE_TIME}\';/g" \
        -e "s/^my \$darkmode =.*/my \$darkmode = \'${DARK_MODE}\';/g" \
+       -e "s/^my \$autodarkmode =.*/my \$autodarkmode = \'${AUTO_DARK_MODE}\';/g" \
        -e "s/^my \$pagerefresh =.*/my \$pagerefresh = \'${PAGE_REFRESH}\';/g" \
        -e "s/^my \$indeximagesperrow =.*/my \$indeximagesperrow = \'${INDEX_IMAGES_PER_ROW}\';/g" \
        -e "s/^my \$indeximageoutput =.*/my \$indeximageoutput = \'${INDEX_IMAGE_OUTPUT}\';/g" \

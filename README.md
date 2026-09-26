@@ -95,6 +95,7 @@ SERVER_NAME | Name of the server in the web page title | Output of `hostname` co
 LARGE_FONTS | Use large fonts in images (0: no, 1: yes) | 0
 CACHE_TIME | Cache created images for given number of minutes (0: disabled) | 1
 DARK_MODE | Black background and inverted image colors, 0: disabled, 1: enabled without rx/tx color inversion, 2: enabled for all colors (available starting from version 2.12) | 0
+AUTO_DARK_MODE | Follow browser or system light/dark theme, 0: to disabled, 1: enabled, dark theme keeps DARK_MODE when it is 1 and otherwise uses 2, light theme forces DARK_MODE to 0 (available starting from version 2.14) | 1
 PAGE_REFRESH | Page auto refresh interval in seconds (0: disabled) | 0
 RUN_VNSTATD | Start vnStat daemon (0: no, 1: yes) | 1
 INDEX_IMAGES_PER_ROW | Number of images to show per row on the index page when the database contains more than one interface (1000: auto fit) (available starting from version 2.13) | 1
